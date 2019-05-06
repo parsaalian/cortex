@@ -34,9 +34,21 @@ export default class Page extends Component {
 
   handleType(e) {
     if (this.state.active) {
-      this.setState({
-        text: this.state.text.concat(e.key)
-      });
+      if (e.key === 'Enter') {
+
+      }
+      else if (e.key === 'Space' || this.state.text.length === 0) {
+        this.setState({
+          text: this.state.text.concat(e.key)
+        });
+      }
+      else {
+        var currentText = this.state.text;
+        currentText[currentText.length - 1] += e.key;
+        this.setState({
+          text: currentText
+        });
+      }
     }
   }
 
