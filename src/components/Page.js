@@ -30,7 +30,6 @@ export default class Page extends Component {
         active: false
       });
     }
-    console.log(this.state.active);
   }
 
   handleType(e) {
