@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Page.css';
+import './Tags.css';
 
 export default class Page extends Component {
   constructor(props) {
@@ -37,7 +38,12 @@ export default class Page extends Component {
       if (e.key === 'Enter') {
 
       }
-      else if (e.key === 'Space' || this.state.text.length === 0) {
+      else if(this.state.text.length === 0) {
+        this.setState({
+          text: this.state.text.concat(e.key)
+        });
+      }
+      else if (e.key === ' ') {
         this.setState({
           text: this.state.text.concat(e.key)
         });
@@ -55,7 +61,7 @@ export default class Page extends Component {
   render() {
     return (
       <div id='type-target' className='page' ref={node => this.node = node}>
-        {this.state.text.map(x => x)}<span className='cursor'></span>
+        {this.state.text.map(x => <span className={x}>{x}</span>)}<span className='cursor'></span>
       </div>
     );
   }
