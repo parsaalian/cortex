@@ -2,10 +2,18 @@ import React, { Component } from 'react';
 import './Page.css';
 import './Tags.css';
 
+// Components
+import Paragraph from './Paragraph';
+
+// Utils
+import Document from '../utils/document';
+
+const doc = new Document();
+
 export default class Page extends Component {
   constructor(props) {
     super(props);
-    this.state = { active: false, text: [] };
+    this.state = { active: false, document: doc.getDocument() };
     this.handleClick = this.handleClick.bind(this);
     this.handleType = this.handleType.bind(this);
   }
@@ -36,23 +44,21 @@ export default class Page extends Component {
   handleType(e) {
     if (this.state.active) {
       if (e.key === 'Enter') {
-
-      }
-      else if(this.state.text.length === 0) {
+        const newDocument = doc.appendParagraph();
         this.setState({
-          text: this.state.text.concat(e.key)
+          document: newDocument
         });
       }
-      else if (e.key === ' ') {
+      else if (e.key === 'Backspace') {
+        const newDocument = doc.clearParagraph();
         this.setState({
-          text: this.state.text.concat(e.key)
+          document: newDocument
         });
       }
       else {
-        var currentText = this.state.text;
-        currentText[currentText.length - 1] += e.key;
+        const newDocument = doc.writeWord(e.key);
         this.setState({
-          text: currentText
+          document: newDocument
         });
       }
     }
@@ -61,7 +67,7 @@ export default class Page extends Component {
   render() {
     return (
       <div id='type-target' className='page' ref={node => this.node = node}>
-        {this.state.text.map(x => <span className={x}>{x}</span>)}<span className='cursor'></span>
+        {this.state.document.map((paragraph, i) => <Paragraph key={i} paragraph={paragraph.getWords()} />)}<span className='cursor'></span>
       </div>
     );
   }
