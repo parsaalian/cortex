@@ -37,6 +37,10 @@ module.exports = class Content extends Node {
     return this.string;
   }
 
+  contentLength() {
+    return this.string.length;
+  }
+  
   length() {
     return this.string.length;
   }

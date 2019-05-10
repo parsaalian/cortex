@@ -20,7 +20,7 @@ var doc = new Document( [
 ]);
 
 
-console.log(doc);
+console.dir(doc,{depth:4})
 /*
   It would be like this
 

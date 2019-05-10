@@ -110,22 +110,28 @@ module.exports = class Container extends Node {
     update indexes from i to the end of childrenInfo
   */
   __updateIndex(i = 0) {
+    console.log("asghar bia ", i, this);
     if (i == 0)
       var totalLength = 0;
     else
       var totalLength = this.childrenInfo[i - 1].index
-        + this.childrenInfo[i - 1].node.length();
+        + this.childrenInfo[i - 1].node.contentLength();
     for (var c = i; c < this.childrenInfo.length; c ++) {
-      this.childrenInfo[i].index = totalLength;
-      totalLength += this.childrenInfo[i].node.length();
+      this.childrenInfo[c].index = totalLength;
+      totalLength += this.childrenInfo[c].node.contentLength();
     }
 
+    this.totalLength = totalLength;
     if (this.communicator != undefined)
       this.communicator.parent.__updateIndex(this.communicator.index);
   }
 
   children() {
     return this.childrenInfo.map(x => x.node);
+  }
+
+  contentLength() {
+    return this.totalLength;
   }
 
   length() {

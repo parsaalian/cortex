@@ -3,12 +3,12 @@ module.exports = class Node {
     this.comm = comm;
   }
 
-  content() {
-    return "";
-  }
-
   children() {
     return [];
+  }
+
+  contentLength() {
+    return 0;
   }
 
   length() {
