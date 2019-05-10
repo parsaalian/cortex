@@ -11,12 +11,14 @@ class Cursor {
       } else if (this.node.communicator.prev != undefined) {
         this.node = this.node.communicator.prev;
         this.index = this.node.length();
-        if (this.node.children()[index - 1] instanceof Content) {
-          left();
-        }
+
       }
     } else {
       // TODO
+    }
+
+    if (this.node.children()[index - 1] instanceof Content) {
+      left();
     }
   }
 

@@ -18,6 +18,10 @@ class Content() {
       this.communicator.parent.edit.removeContent(this.communicator.index);
     },
 
+    insert: (node, i) => {
+      // TODO, break at i, insert nodes
+    },
+
     insertContent: (str, i) => {
       this.string.splice(i, 0, ...str);
     },

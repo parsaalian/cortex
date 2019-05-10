@@ -1,7 +1,8 @@
 import Node from './node';
 
 class Container extends Node {
-  constructor(nodes=[]) {
+  constructor(type, nodes=[]) {
+    this.type = type;
     this.childrenInfo = this.__connectNodes(nodes, 0);
     this.__updateIndex(0);
   }
@@ -13,7 +14,7 @@ class Container extends Node {
       */
       _prefixMerge: (other) => {
         this.childrenInfo.unshift(...this.__connectNodes(other.children(), 0));
-        this.bind(other.length());
+        this.edit.merge.__bind(other.length());
       },
 
       /**
@@ -21,7 +22,7 @@ class Container extends Node {
       */
       _suffixMerge: (other) => {
         this.childrenInfo.push(...this.__connectNodes(other.children(), this.length()));
-        this.bind(this.length());
+        this.edit.merge.__bind(this.length());
       },
 
       /**
@@ -66,14 +67,26 @@ class Container extends Node {
       this.__updateIndex(i);
     },
 
-    removeContent: (i) => {
+    remove: (i) => {
       this.childrenInfo.splice(i, 1);
 
       this.edit.merge.__bind(i);
       this.__updateIndex(i);
     },
-  };
 
+    insert: (node, i) => {
+      this.childrenInfo.splice(i, 0, node);
+      this.edit.merge.__bind(i - 1);
+      this.__updateIndex(i);
+    },
+
+    insertAll: (nodes, i) => {
+      this.childrenInfo.splice(i, 0, ...this.__connectNodes(nodes, i));
+      this.edit.merge.__bind(i + nodes.length - 1);
+      this.edit.merge.__bind(i - 1);
+      this.__updateIndex(i);
+    }
+  };
   /**
     computes communicator for nodes assuming insertion at i
   */
