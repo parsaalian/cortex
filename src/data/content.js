@@ -3,13 +3,32 @@ class Content() {
     this.string = value;
   }
 
-  insertContent(str, i) {
-    this.string = this.string.slice(0, i) + str + this.string.slice(i);
-  }
+  edit = {
+    merge: {
+      _prefixMerge: (other) => {
+        insertContent(other.content(), 0);
+      },
 
-  deleteContent(i, j) {
-    this.string += this.string.slice(0, i) + this.string.slice(j);
-  }
+      _suffixMerge: (other) => {
+        insertContent(other.content(), this.length());
+      },
+    },
+
+    sucide: () => {
+      this.communicator.parent.edit.removeContent(this.communicator.index);
+    },
+
+    insertContent: (str, i) => {
+      this.string.splice(i, 0, ...str);
+    },
+
+    deleteContent: (i, j) =>  {
+      this.string.splice(i, j - i);
+      if (!this.string) {
+        sucide();
+      }
+    }
+  };
 
   content() {
     return this.string;

@@ -1,12 +1,17 @@
-class Cursor {
-  this(node, index) {
-    this.node = node;
-    this.index = index;
-  }
-}
-
 class Node {
   setCommunicator(comm) {
     this.comm = comm;
+  }
+
+  content() {
+    return "";
+  }
+
+  children() {
+    return [];
+  }
+
+  length() {
+    return 0;
   }
 }

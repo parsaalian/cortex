@@ -2,40 +2,87 @@ import Node from './node';
 
 class Container extends Node {
   constructor(nodes=[]) {
-    this.childrenInfo = []
-    insertNodes(nodes, 0);
+    this.childrenInfo = this.__connectNodes(nodes, 0);
+    this.__updateIndex(0);
   }
 
-  removeStyle(i) {
-    let node = this.childrenInfo[i].node;
-    removeNode(i);
-    insertNodes(nodes.childrenInfo.map(x => x.node));
-  }
+  edit = {
+    merge: {
+      /**
+        appends another node's children to start of this
+      */
+      _prefixMerge: (other) => {
+        this.childrenInfo.unshift(...this.__connectNodes(other.children(), 0));
+        this.bind(other.length());
+      },
 
-  removeNode(i) {
-    this.children = this.children.slice(0, i) + this.children.slice(i + 1);
-    updateIndex(i);
-  }
+      /**
+        appends another node's children to end of this
+      */
+      _suffixMerge: (other) => {
+        this.childrenInfo.push(...this.__connectNodes(other.children(), this.length()));
+        this.bind(this.length());
+      },
 
-  insertNodes(nodes, i) {
-    if (i > 0) {
-      this.childrenInfo[i - 1].next = nodes[0];
-      nodes.unshift(this.childrenInfo[i - 1].node);
-    } else
-      nodes.unshift(undefined);
+      /**
+        connects items at i, i + 1, communicatorally and may merge them!
+      */
+      __bind(i) {
+        let a = this.childrenInfo[i].node;
+        let b = this.childrenInfo[i + 1].node;
+        if (typeof a == typeof b) {
+          if (a.length() < b.length()) {
+            b.edit.merge._prefixMerge(a);
+            var m = b;
+          } else {
+            a.edit.merge._suffixMerge(b);
+            var m = a;
+          }
 
-    if (i < this.childrenInfo.length) {
-      this.childrenInfo[i].next = nodes[nodes.length - 1];
-      nodes.push(this.childrenInfo[i].node);
-    } else
-      nodes.push(undefined);
+          this.childrenInfo.splice(i, 2, m);
+        } else {
+          this.childrenInfo[i].next = b;
+          this.childrenInfo[i + 1].prev = a;
+        }
+      }
+    },
 
-    // ignore prefix and suffix in insertion
-    for (c = 1; c < nodes.length - 1; c ++) {
-      var node = nodes[c];
+    /**
+      removes this node's style
+    */
+    sucideStyle: () => {
+      this.communicator.parent.edit.removeStyle(this.communicator.index);
+    },
+
+    /**
+      removes ith style node but preserving it contents
+    */
+    removeStyle: (i) => {
+      let node = this.childrenInfo[i].node;
+      this.childrenInfo.splice(i, 1, ...this.__connectNodes(node.children(), i));
+
+      this.edit.merge.__bind(i + node.length() - 1);
+      this.edit.merge.__bind(i - 1);
+      this.__updateIndex(i);
+    },
+
+    removeContent: (i) => {
+      this.childrenInfo.splice(i, 1);
+
+      this.edit.merge.__bind(i);
+      this.__updateIndex(i);
+    },
+  };
+
+  /**
+    computes communicator for nodes assuming insertion at i
+  */
+  __connectNodes(nodes, i) {
+    arr = [];
+    for (int c = 0; c < nodes.length; c ++) {
       var info = {
         communicator: {
-          index: c + i - 1,
+          index: c + i,
           next: nodes[c + 1],
           prev: nodes[c - 1],
           parent: this
@@ -44,23 +91,14 @@ class Container extends Node {
         index: null
       };
       node.setCommunicator(info.communicator);
-    }
-    updateIndex(i);
-  }
-
-  removeRange(i, j) {
-    // TODO make it binary search
-    var c = 0;
-    for (var i = 0; i < this.lengths.length; i ++) {
-      if (c < i && c + this.lengths[i] >= i) {
-        this.children[i].
-        break;
-      }
-      c += this.lengths[i];
+      arr.push(info);
     }
   }
 
-  updateIndex(i = 0) {
+  /**
+    update indexes from i to the end of childrenInfo
+  */
+  __updateIndex(i = 0) {
     if (i == 0)
       var totalLength = 0;
     else
@@ -70,5 +108,15 @@ class Container extends Node {
       this.childrenInfo[i].index = totalLength;
       totalLength += info.length();
     }
+
+    this.communicator.parent.__updateIndex(this.communicator.index);
+  }
+
+  children() {
+    return this.childrenInfo.map(x => x.node);
+  }
+
+  length() {
+    return this.childrenInfo.length;
   }
 }
