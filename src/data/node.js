@@ -1,4 +1,4 @@
-class Node {
+module.exports = class Node {
   setCommunicator(comm) {
     this.comm = comm;
   }

@@ -1,3 +1,6 @@
+Container = require('./container');
+Content = require('./content');
+
 class Cursor {
   this(node, index) {
     this.node = node;
@@ -5,7 +8,7 @@ class Cursor {
   }
 
   left() {
-    if (this.node intanceof Content) {
+    if (this.node instanceof Content) {
       if (this.index > 0) {
         this.index --;
       } else if (this.node.communicator.prev != undefined) {
@@ -23,7 +26,7 @@ class Cursor {
   }
 
   right() {
-    if (this.node intanceof Content) {
+    if (this.node instanceof Content) {
       if (this.index < this.node.length()) {
         this.index ++;
       } else if (this.node.communicator.next != undefined) {
