@@ -1,6 +1,6 @@
 const Node = require('./node');
 
-export default class Content extends Node {
+module.exports = class Content extends Node {
   constructor(value='') {
     super();
     this.string = value;

@@ -1,6 +1,6 @@
 const Node = require('./node');
 
-export default class Container extends Node {
+module.exports = class Container extends Node {
   constructor(nodes=[]) {
     super();
     this.childrenInfo = this.__connectNodes(nodes, 0);
@@ -29,7 +29,6 @@ export default class Container extends Node {
   __bind(i) {
     let a = this.childrenInfo[i].node;
     let b = this.childrenInfo[i + 1].node;
-    var m;
     if (typeof a == typeof b) {
       var m;
       if (a.length() < b.length()) {
