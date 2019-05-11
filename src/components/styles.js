@@ -12,6 +12,12 @@ class Style extends Component {
   }
 }
 
+export class Text extends Component {
+  render() {
+    return <Style type='inline'>{this.props.children}</Style>;
+  }
+}
+
 export class Paragraph extends Component {
   render() {
     return <Style type='outline' styleName={this.props.paragraph}>{this.props.children}</Style>;
@@ -30,8 +36,8 @@ export class Bold extends Component {
   }
 }
 
-export class Text extends Component {
+export class Italic extends Component {
   render() {
-    return <Style type='inline'>{this.props.children}</Style>;
+    return <Style type='inline' styleName='italic'>{this.props.children}</Style>;
   }
 }

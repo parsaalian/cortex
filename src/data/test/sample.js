@@ -1,13 +1,13 @@
 const Container = require('../container');
 const Content = require('../content');
 // const Cursor = require('../cursor');
-const {Paragraph, Size, Bold} = require('../styles');
+const { Paragraph, Size, Bold, Italic } = require('../styles');
 
 class Document extends Container {};
 
 module.exports = new Document([
   new Paragraph([
-    new Content("This is this!"),
+    new Italic([new Content("This is this!")]),
     new Size(18, [new Bold([new Content("with size 14!")])])
   ]),
   new Content("Ok! I think its obvious"),

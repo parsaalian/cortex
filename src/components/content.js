@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import { Text,
           Paragraph,
           Size,
-          Bold } from './styles';
+          Bold,
+          Italic } from './styles';
 
 // utils
 import TypeCheck from '../utils/typeCheck';
@@ -23,8 +24,10 @@ export default class Content extends Component {
         return <Size size={this.props.content.size}>{this.props.content.children().map((child, i) => <Content key={i} content={child} />)}</Size>
 
       case 'bold':
-        console.log(this.props.content.children());
         return <Bold>{this.props.content.children().map((child, i) => <Content key={i} content={child} />)}</Bold>
+
+      case 'italic':
+        return <Italic>{this.props.content.children().map((child, i) => <Content key={i} content={child} />)}</Italic>
 
       default:
         return <div></div>

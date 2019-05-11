@@ -10,5 +10,7 @@ module.exports = {
     }
   },
 
-  Bold: class Bold extends Container {}
+  Bold: class Bold extends Container {},
+
+  Italic: class Italic extends Container {}
 }
