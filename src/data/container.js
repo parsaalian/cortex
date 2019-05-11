@@ -1,6 +1,6 @@
 const Node = require('./node');
 
-module.exports = class Container extends Node {
+export default class Container extends Node {
   constructor(nodes=[]) {
     super();
     this.childrenInfo = this.__connectNodes(nodes, 0);
@@ -29,6 +29,7 @@ module.exports = class Container extends Node {
   __bind(i) {
     let a = this.childrenInfo[i].node;
     let b = this.childrenInfo[i + 1].node;
+    var m;
     if (typeof a == typeof b) {
       var m;
       if (a.length() < b.length()) {
@@ -112,7 +113,7 @@ module.exports = class Container extends Node {
   */
   __updateIndex(i = 0) {
     console.log("asghar bia ", i, this);
-    var totalLength
+    var totalLength;
     if (i === 0)
       totalLength = 0;
     else
