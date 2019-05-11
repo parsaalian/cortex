@@ -1,4 +1,4 @@
-Node = require('./node');
+const Node = require('./node');
 
 module.exports = class Container extends Node {
   constructor(nodes=[]) {
@@ -30,12 +30,13 @@ module.exports = class Container extends Node {
     let a = this.childrenInfo[i].node;
     let b = this.childrenInfo[i + 1].node;
     if (typeof a == typeof b) {
+      var m;
       if (a.length() < b.length()) {
         b.edit.merge._prefixMerge(a);
-        var m = b;
+        m = b;
       } else {
         a.edit.merge._suffixMerge(b);
-        var m = a;
+        m = a;
       }
 
       this.childrenInfo.splice(i, 2, m);
@@ -111,10 +112,11 @@ module.exports = class Container extends Node {
   */
   __updateIndex(i = 0) {
     console.log("asghar bia ", i, this);
-    if (i == 0)
-      var totalLength = 0;
+    var totalLength
+    if (i === 0)
+      totalLength = 0;
     else
-      var totalLength = this.childrenInfo[i - 1].index
+      totalLength = this.childrenInfo[i - 1].index
         + this.childrenInfo[i - 1].node.contentLength();
     for (var c = i; c < this.childrenInfo.length; c ++) {
       this.childrenInfo[c].index = totalLength;
@@ -122,7 +124,7 @@ module.exports = class Container extends Node {
     }
 
     this.totalLength = totalLength;
-    if (this.communicator != undefined)
+    if (this.communicator !== undefined)
       this.communicator.parent.__updateIndex(this.communicator.index);
   }
 

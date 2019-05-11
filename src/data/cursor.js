@@ -1,5 +1,5 @@
-Container = require('./container');
-Content = require('./content');
+const Container = require('./container');
+const Content = require('./content');
 
 class Cursor {
   this(node, index) {
@@ -11,7 +11,7 @@ class Cursor {
     if (this.node instanceof Content) {
       if (this.index > 0) {
         this.index --;
-      } else if (this.node.communicator.prev != undefined) {
+      } else if (this.node.communicator.prev !== undefined) {
         this.node = this.node.communicator.prev;
         this.index = this.node.length();
 
@@ -20,8 +20,8 @@ class Cursor {
       // TODO
     }
 
-    if (this.node.children()[index - 1] instanceof Content) {
-      left();
+    if (this.node.children()[this.index - 1] instanceof Content) {
+      this.left();
     }
   }
 
@@ -29,11 +29,11 @@ class Cursor {
     if (this.node instanceof Content) {
       if (this.index < this.node.length()) {
         this.index ++;
-      } else if (this.node.communicator.next != undefined) {
+      } else if (this.node.communicator.next !== undefined) {
         this.node = this.node.communicator.next;
         this.index = 0;
-        if (this.node.children()[index] instanceof Content) {
-          right();
+        if (this.node.children()[this.index] instanceof Content) {
+          this.right();
         }
       }
     } else {

@@ -1,4 +1,4 @@
-Node = require('./node');
+const Node = require('./node');
 
 module.exports = class Content extends Node {
   constructor(value='') {
@@ -7,11 +7,11 @@ module.exports = class Content extends Node {
   }
 
   _prefixMerge(other) {
-    insertContent(other.content(), 0);
+    this.insertContent(other.content(), 0);
   }
 
   _suffixMerge(other) {
-    insertContent(other.content(), this.length());
+    this.insertContent(other.content(), this.length());
   }
 
   sucide() {
@@ -29,7 +29,7 @@ module.exports = class Content extends Node {
   deleteContent(i, j)  {
     this.string.splice(i, j - i);
     if (!this.string) {
-      sucide();
+      this.sucide();
     }
   }
 
@@ -40,7 +40,7 @@ module.exports = class Content extends Node {
   contentLength() {
     return this.string.length;
   }
-  
+
   length() {
     return this.string.length;
   }

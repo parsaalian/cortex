@@ -1,6 +1,6 @@
-Container = require('../container');
-Content = require('../content');
-Cursor = require('../cursor');
+const Container = require('../container');
+const Content = require('../content');
+// const Cursor = require('../cursor');
 
 class Document extends Container {};
 class Paragraph extends Container {};
@@ -11,7 +11,7 @@ class Size extends Container {
   }
 };
 
-var doc = new Document( [
+var doc = new Document([
   new Paragraph([
     new Content("This is this!"),
     new Size(14, [new Content("with size 14!")])
@@ -20,7 +20,7 @@ var doc = new Document( [
 ]);
 
 
-console.dir(doc,{depth:4})
+console.dir(doc, {depth:4})
 /*
   It would be like this
 
