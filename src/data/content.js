@@ -14,7 +14,7 @@ module.exports = class Content extends Node {
     this.insertContent(other.content(), this.length());
   }
 
-  sucide() {
+  suicide() {
     this.communicator.parent.edit.removeContent(this.communicator.index);
   }
 
@@ -29,7 +29,7 @@ module.exports = class Content extends Node {
   deleteContent(i, j)  {
     this.string.splice(i, j - i);
     if (!this.string) {
-      this.sucide();
+      this.suicide();
     }
   }
 

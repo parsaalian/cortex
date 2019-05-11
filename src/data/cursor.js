@@ -44,7 +44,7 @@ class Cursor {
   backspace() {
     if (this.node instanceof Content) {
       if (this.index > 0) {
-        this.node.communicator.prev.edit.sucideStyle();
+        this.node.communicator.prev.edit.suicideStyle();
       } else {
         this.node.edit.deleteContent(this.index - 1, this.index);
         this.index --;

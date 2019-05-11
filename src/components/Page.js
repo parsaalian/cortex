@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import './Page.css';
-import './Tags.css';
+import './page.css';
 
-// Components
-import Paragraph from './Paragraph';
+import Content from './content';
 
-// Utils
-import Document from '../utils/document';
-
-const doc = new Document();
+// Document
+import doc from '../data/test/sample';
 
 export default class Page extends Component {
-  constructor(props) {
+  /*constructor(props) {
     super(props);
     this.state = { active: false, document: doc.getDocument() };
     this.handleClick = this.handleClick.bind(this);
@@ -62,12 +58,12 @@ export default class Page extends Component {
         });
       }
     }
-  }
+  }*/
 
   render() {
     return (
       <div id='type-target' className='page' ref={node => this.node = node}>
-        {this.state.document.map((paragraph, i) => <Paragraph key={i} paragraph={paragraph.getWords()} />)}<span className='cursor'></span>
+        {doc.children().map((child, i) => <Content key={i} content={child}/>)}
       </div>
     );
   }

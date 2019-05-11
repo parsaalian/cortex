@@ -1,26 +1,20 @@
 const Container = require('../container');
 const Content = require('../content');
 // const Cursor = require('../cursor');
+const {Paragraph, Size} = require('../styles');
 
 class Document extends Container {};
-class Paragraph extends Container {};
-class Size extends Container {
-  constructor(size, nodes) {
-    super(nodes);
-    this.size = size;
-  }
-};
 
-var doc = new Document([
+module.exports = new Document([
   new Paragraph([
     new Content("This is this!"),
-    new Size(14, [new Content("with size 14!")])
+    new Size(18, [new Content("with size 14!")])
   ]),
   new Content("Ok! I think its obvious"),
 ]);
 
 
-console.dir(doc, {depth:4})
+// console.dir(doc, {depth:4})
 /*
   It would be like this
 

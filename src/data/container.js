@@ -30,7 +30,7 @@ module.exports = class Container extends Node {
     let a = this.childrenInfo[i].node;
     let b = this.childrenInfo[i + 1].node;
     if (typeof a == typeof b) {
-      var m;
+      let m;
       if (a.length() < b.length()) {
         b.edit.merge._prefixMerge(a);
         m = b;
@@ -49,7 +49,7 @@ module.exports = class Container extends Node {
   /**
     removes this node's style
   */
-  sucideStyle() {
+  suicideStyle() {
     this.communicator.parent.edit.removeStyle(this.communicator.index);
   }
 
@@ -112,7 +112,7 @@ module.exports = class Container extends Node {
   */
   __updateIndex(i = 0) {
     console.log("asghar bia ", i, this);
-    var totalLength;
+    let totalLength;
     if (i === 0)
       totalLength = 0;
     else
