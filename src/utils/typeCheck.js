@@ -1,6 +1,7 @@
 import Content from '../data/content';
 import { Paragraph,
-          Size } from '../data/styles';
+          Size,
+          Bold} from '../data/styles';
 
 export default class TypeCheck {
   getType(obj) {
@@ -12,6 +13,9 @@ export default class TypeCheck {
     }
     else if (obj instanceof Size) {
       return 'size';
+    }
+    else if (obj instanceof Bold) {
+      return 'bold';
     }
   }
 }

@@ -24,6 +24,12 @@ export class Size extends Component {
   }
 }
 
+export class Bold extends Component {
+  render() {
+    return <Style type='inline' styleName='bold'>{this.props.children}</Style>;
+  }
+}
+
 export class Text extends Component {
   render() {
     return <Style type='inline'>{this.props.children}</Style>;

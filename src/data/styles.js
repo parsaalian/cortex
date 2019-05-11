@@ -8,5 +8,7 @@ module.exports = {
       super(nodes);
       this.size = size;
     }
-  }
+  },
+
+  Bold: class Bold extends Container {}
 }
