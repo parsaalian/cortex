@@ -4,7 +4,7 @@ import './page.css';
 import Content from './content';
 
 // Document
-import doc from '../data/test/sample';
+import doc from './sample/sample';
 
 export default class Page extends Component {
   /*constructor(props) {
