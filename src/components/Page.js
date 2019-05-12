@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
 import './page.css';
 
+// components
 import Content from './content';
 
-// Document
+// styles
+import styles from './styles';
+
+// document
 import doc from './sample/sample';
 
+// register
+import ComponentRegistration from '../utils/componentRegistration';
+
 export default class Page extends Component {
+  constructor(props) {
+    super(props);
+    ComponentRegistration.register(styles);
+  }
+
   /*constructor(props) {
     super(props);
     this.state = { active: false, document: doc.getDocument() };

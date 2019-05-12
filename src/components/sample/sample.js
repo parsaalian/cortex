@@ -1,15 +1,12 @@
 import Content from '../../data/content';
 import Container from '../../data/container';
-import { ParagraphContainer, BoldContainer } from '../styles';
 
-class Document extends Container {}
-
-const doc = new Document([
-  new ParagraphContainer([
-    new Content("This is this!"),
-    new BoldContainer([new Content("This is bold!")])
+const doc = new Container('document', [
+  new Container('paragraph', [
+    new Container('bold', [new Content('this should be bold! ')]),
+    new Container('size', [new Content('this should be large!')], { size: 24 })
   ]),
-  new Content("Ok! I think its obvious"),
+  new Content('this is a test')
 ]);
 
 export default doc;

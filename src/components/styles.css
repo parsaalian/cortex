@@ -1,5 +1,5 @@
-.size18 {
-  font-size: 18px;
+.size-24 {
+  font-size: 24px;
 }
 
 .bold {
@@ -8,23 +8,4 @@
 
 .italic {
   font-style: italic;
-}
-
-/**
-  * In this part we define horizontal adjustment elements
-*/
-.text-justify {
-  text-align: justify;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.text-right {
-  text-align: right;
 }

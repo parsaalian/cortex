@@ -44,4 +44,8 @@ module.exports = class Content extends Node {
   length() {
     return this.string.length;
   }
+
+  type() {
+    return 'content';
+  }
 }

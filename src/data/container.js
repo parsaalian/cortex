@@ -1,8 +1,10 @@
 const Node = require('./node');
 
 module.exports = class Container extends Node {
-  constructor(nodes=[]) {
+  constructor(type, nodes=[], attributes={}) {
     super();
+    this._type = type;
+    this._attributes = attributes;
     this.childrenInfo = this.__connectNodes(nodes, 0);
     this.__updateIndex(0);
   }
@@ -111,7 +113,7 @@ module.exports = class Container extends Node {
     update indexes from i to the end of childrenInfo
   */
   __updateIndex(i = 0) {
-    console.log("asghar bia ", i, this);
+    // console.log("asghar bia ", i, this);
     let totalLength;
     if (i === 0)
       totalLength = 0;
@@ -138,5 +140,13 @@ module.exports = class Container extends Node {
 
   length() {
     return this.childrenInfo.length;
+  }
+
+  type() {
+    return this._type;
+  }
+
+  attributes() {
+    return this._attributes;
   }
 }
