@@ -8,7 +8,9 @@ export default class Content extends Component {
       return <View>{this.props.content.content()}</View>
     }
     else {
-      return <View attributes={this.props.content.attributes()}>{this.props.content.children().map((child, i) => <Content key={i} content={child} />)}</View>
+      return (<View attributes={this.props.content.attributes()}>
+        {this.props.content.children().map((child, i) => <Content key={i} content={child} />)}
+      </View>);
     }
   }
 }
