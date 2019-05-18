@@ -1,5 +1,5 @@
-import Content from '../../data/content';
-import Container from '../../data/container';
+import Content from 'global/models/editorData/content';
+import Container from 'global/models/editorData/container';
 
 const doc = new Container('document', [
   new Container('paragraph', [

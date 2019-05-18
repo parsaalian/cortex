@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ComponentRegistration from '../utils/componentRegistration';
+import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
 
 export default class Content extends Component {
   render() {

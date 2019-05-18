@@ -62,12 +62,14 @@ export default class StateTable {
       case stateActions.UPDATE:
         this.update(lastAction.state, lastAction.previous, true);
         break;
+      default:
+
     }
   }
 
   multiRollback(n) {
     for (var i = 0; i < n; i++) {
-      rollback();
+      this.rollback();
     }
   }
 

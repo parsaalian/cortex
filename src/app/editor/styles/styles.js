@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './styles.css';
+import './styles.scss';
 
-class Style extends Component {
+export class Style extends Component {
   render() {
     switch (this.props.type) {
       case 'inline':
