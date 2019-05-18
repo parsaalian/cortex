@@ -1,16 +1,8 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import './styles.scss';
-
-export class Style extends Component {
-  render() {
-    switch (this.props.type) {
-      case 'inline':
-        return <span className={this.props.styleName}>{this.props.children}</span>
-      default:
-        return <div className={this.props.styleName}>{this.props.children}</div>
-    }
-  }
-}
+import Style from './style';
+import fonts from './fonts/fonts';
 
 const styles = {
   'content':
@@ -46,4 +38,4 @@ const styles = {
   }
 };
 
-export default styles;
+export default _.merge(styles, fonts);

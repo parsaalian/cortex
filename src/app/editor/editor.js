@@ -8,6 +8,10 @@ import ComponentRegistration from 'global/models/componentRegistration/component
 export default class Editor extends Component {
   constructor(props) {
     super(props);
+    this.startup();
+  }
+
+  startup() {
     ComponentRegistration.register(styles);
   }
 
