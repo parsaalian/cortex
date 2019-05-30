@@ -1,3 +1,31 @@
+.wys {
+  position: relative;
+
+  & .wym {
+    font-size: 14px;
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 6px 6px;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+  }
+
+  &:hover {
+    border: 1px solid orange;
+    & .wym {
+      visibility: visible;
+    }
+  }
+}
+
 /******************** Styling text *******************/
 $roman: Merriweather, Georgia, "Times New Roman", serif;
 $sans-serif: "Source Sans Pro", Helvetica, Verdana, sans-serif;
