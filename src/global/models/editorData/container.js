@@ -22,7 +22,7 @@ module.exports = class Container extends Node {
   */
   _suffixMerge(other) {
     this.childrenInfo.push(...this.__connectNodes(other.children(), this.length()));
-    this.edit.merge.__bind(this.length());
+    this.__bind(this.length());
   }
 
   /**

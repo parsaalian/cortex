@@ -8,6 +8,15 @@ class Cursor {
   }
 
   left() {
+    if (this.node instanceof Conent && this.index > 0) {
+      // pass the char
+      this.index --;
+    } else (this.this.index == 0) {
+      // pass an start
+
+    }
+
+
     if (this.node instanceof Content) {
       if (this.index > 0) {
         this.index --;
