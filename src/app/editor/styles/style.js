@@ -1,18 +1,28 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import WYM from './wym';
+import WYM from './wym/wym';
 
 export default class Style extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { wymExpanded: false };
+    this.expandWYM = this.expandWYM.bind(this);
+  }
+
+  expandWYM(e) {
+    e.preventDefault();
+    this.setState({
+      wymExpanded: !this.state.wymExpanded
+    });
+  }
+
   render() {
     switch (this.props.type) {
       case 'inline':
         return this.props.styleName ?
-                <span className={classNames(
-                                this.props.styleName,
-                                'wys')
-                                }>
+                <span className={classNames(this.props.styleName, 'wys')} onClick={this.expandWYM}>
                   {this.props.children}
-                  <WYM wym={this.props.styleName} />
+                  <WYM wym={this.props.styleName} expand={this.state.wymExpanded} />
                 </span> :
                 <Fragment>{this.props.children}</Fragment>
       default:

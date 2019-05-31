@@ -14,7 +14,6 @@ const styles = {
   'paragraph':
   class Paragraph extends Component {
     render() {
-      console.log('in paragraph');
       return <Style type='outline'>{this.props.children}</Style>;
     }
   }
