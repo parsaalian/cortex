@@ -19,15 +19,15 @@ export default class Style extends Component {
   render() {
     switch (this.props.type) {
       case 'inline':
-        return this.props.styleName ?
-                <span className={classNames(this.props.styleName, 'wys')} onClick={this.expandWYM}>
+        return this.props.styleName || this.props.styleObj ?
+                <span className={classNames(this.props.styleName, 'wys')} onClick={this.expandWYM} style={this.props.styleObj}>
                   {this.props.children}
                   <WYM wym={this.props.styleName} expand={this.state.wymExpanded} />
                 </span> :
                 <Fragment>{this.props.children}</Fragment>
       default:
-        return this.props.styleName ?
-                <div className={this.props.styleName}>{this.props.children}</div> :
+        return this.props.styleName || this.props.styleObj ?
+                <div className={this.props.styleName} style={this.props.styleObj}>{this.props.children}</div> :
                 <Fragment>{this.props.children}</Fragment>
     }
   }

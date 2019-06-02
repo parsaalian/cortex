@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import './styles.scss';
 import Style from './style';
+import textFormattings from './textFormattings/textFormattings';
 import fonts from './fonts/fonts';
 
 const styles = {
@@ -19,4 +20,4 @@ const styles = {
   }
 };
 
-export default _.merge(styles, fonts);
+export default _.merge(styles, textFormattings, fonts);

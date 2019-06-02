@@ -26,6 +26,19 @@
   }
 }
 
+/********************** Spacings *********************/
+.single-spacing {
+  line-height: normal;
+}
+
+.one-half-spacing {
+  line-height: 1.3;
+}
+
+.double-spacing {
+  line-height: 1.6;
+}
+
 /******************** Styling text *******************/
 $roman: Merriweather, Georgia, "Times New Roman", serif;
 $sans-serif: "Source Sans Pro", Helvetica, Verdana, sans-serif;
