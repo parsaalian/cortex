@@ -1,7 +1,7 @@
-const Node = require('./node');
+const Node = require("./node");
 
 module.exports = class Content extends Node {
-  constructor(value='') {
+  constructor(value="") {
     super();
     this.string = value;
   }
@@ -46,6 +46,6 @@ module.exports = class Content extends Node {
   }
 
   type() {
-    return 'content';
+    return "content";
   }
 }

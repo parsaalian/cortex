@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import Editor from 'app/editor/editor';
+import Editor from "app/editor/editor";
 
 export default class App extends Component {
   render() {

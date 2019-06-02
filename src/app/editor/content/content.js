@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
+import React, { Component } from "react";
+import ComponentRegistration from "global/models/componentRegistration/componentRegistration";
 
 export default class Content extends Component {
   render() {
     const View = ComponentRegistration.getView(this.props.content.type());
-    if (this.props.content.type() === 'content') {
+    if (this.props.content.type() === "content") {
       return <View>{this.props.content.content()}</View>
     }
     else {

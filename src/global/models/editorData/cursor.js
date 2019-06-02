@@ -1,5 +1,5 @@
-const Container = require('./container');
-const Content = require('./content');
+const Container = require("./container");
+const Content = require("./content");
 
 class Cursor {
   this(node, index) {

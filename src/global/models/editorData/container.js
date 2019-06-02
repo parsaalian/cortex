@@ -1,4 +1,4 @@
-const Node = require('./node');
+const Node = require("./node");
 
 module.exports = class Container extends Node {
   constructor(type, nodes=[], attributes={}) {
@@ -10,7 +10,7 @@ module.exports = class Container extends Node {
   }
 
   /**
-    appends another node's children to start of this
+    appends another node"s children to start of this
   */
   _prefixMerge(other) {
     this.childrenInfo.unshift(...this.__connectNodes(other.children(), 0));
@@ -18,7 +18,7 @@ module.exports = class Container extends Node {
   }
 
   /**
-    appends another node's children to end of this
+    appends another node"s children to end of this
   */
   _suffixMerge(other) {
     this.childrenInfo.push(...this.__connectNodes(other.children(), this.length()));
@@ -49,7 +49,7 @@ module.exports = class Container extends Node {
   }
 
   /**
-    removes this node's style
+    removes this node"s style
   */
   suicideStyle() {
     this.communicator.parent.edit.removeStyle(this.communicator.index);

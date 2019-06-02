@@ -1,5 +1,5 @@
-import { stateActions } from './consts';
-import HistoryTable from './history';
+import { stateActions } from "./consts";
+import HistoryTable from "./history";
 
 export class State {
   constructor(value) {

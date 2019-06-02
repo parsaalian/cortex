@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import classNames from 'classnames';
-import WYM from './wym/wym';
+import React, { Component, Fragment } from "react";
+import classNames from "classnames";
+import WYM from "./wym/wym";
 
 export default class Style extends Component {
   constructor(props) {
@@ -18,9 +18,9 @@ export default class Style extends Component {
 
   render() {
     switch (this.props.type) {
-      case 'inline':
+      case "inline":
         return this.props.styleName || this.props.styleObj ?
-                <span className={classNames(this.props.styleName, 'wys')} onClick={this.expandWYM} style={this.props.styleObj}>
+                <span className={classNames(this.props.styleName, "wys")} onClick={this.expandWYM} style={this.props.styleObj}>
                   {this.props.children}
                   <WYM wym={this.props.styleName} expand={this.state.wymExpanded} />
                 </span> :
