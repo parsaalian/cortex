@@ -74,7 +74,7 @@ class Cursor {
 }
 
 CursorHandle = (_super) => class extends _super {
-  get visualChildren() {
+  get visualChildren(cursor) {
     if (this == cursor.node) {
       return this.children.splice(cursor.index, 0, cursor);
     } else
