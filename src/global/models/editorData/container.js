@@ -113,7 +113,6 @@ module.exports = class Container extends Node {
     update indexes from i to the end of childrenInfo
   */
   __updateIndex(i = 0) {
-    // console.log("asghar bia ", i, this);
     let totalLength;
     if (i === 0)
       totalLength = 0;
