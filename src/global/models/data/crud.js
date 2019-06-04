@@ -42,7 +42,7 @@ let CRUD = (_super) => class extends _super {
     this.replace(children, i, i);
   }
 
-  delete(i, j) {
+  remove(i, j) {
     this.replace([], i, j);
   }
 }

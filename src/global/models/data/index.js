@@ -1,3 +1,7 @@
+let { Connectable, Connector } = require("./connection");
+let { CRUD, NodeReplace } = require("./crud");
+let { CursorHandle } = require("./cursor");
+
 class Node {
   constructor(children) {
     this.children = children
@@ -9,8 +13,12 @@ class Node {
   }
 }
 
+Node = Connectable(Node);
+Node = CRUD(Node);
+Node = CursorHandle(Node);
+
 class Container extends Node {
-  constructor(children) {
+  constructor(children, type, attributes) {
     super(children, type, attributes);
     this.type = type;
     this.attributes = attributes;
@@ -25,8 +33,10 @@ class Content extends Node {
   }
 }
 
+Container = Connector(Container);
+Container = NodeReplace(Container);
+
 module.exports = {
-  Node: Node,
   Container: Container,
   Content: Content
 }
