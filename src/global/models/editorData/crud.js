@@ -46,3 +46,8 @@ let CRUD = (_super) => class extends _super {
     this.replace([], i, j);
   }
 }
+
+module.exports = {
+  NodeReplace: NodeReplace,
+  CRUD: CRUD
+}

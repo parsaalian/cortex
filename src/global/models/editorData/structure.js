@@ -25,4 +25,8 @@ class Content extends Node {
   }
 }
 
-export {Node, Container, Content};
+module.exports = {
+  Node: Node,
+  Container: Container,
+  Content: Content
+}

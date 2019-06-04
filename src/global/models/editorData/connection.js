@@ -23,4 +23,7 @@ let Connector = (_super) => class extends _super {
   }
 };
 
-export {Connectable, Connector};
+module.exports = {
+  Connectable: Connectable,
+  Connector: Connector
+}

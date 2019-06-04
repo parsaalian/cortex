@@ -1,6 +1,6 @@
-import {Node, Container, Content} from "./structure";
-import {Connectable, Connector} from "./connection";
-import {CRUD, NodeReplace} from "./crud";
+let { Node, Container, Content } = require("./structure");
+let { Connectable, Connector } = require("./connection");
+let { CRUD, NodeReplace } = require("./crud");
 
 Node = Connectable(Node);
 Node = CRUD(Node);
