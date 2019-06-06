@@ -29,7 +29,7 @@ let CRUD = (_super) => class extends _super {
     if (!Array.isArray(children))
       children = [children];
     this.children.splice(i, j - i, ...children);
-    if (this.length == 0) {
+    if (this.length === 0) {
       this.sucide();
     }
   }
