@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
 import Content from './content';
 import Cursor from './cursor';
 import Container from './container';

@@ -8,45 +8,45 @@ class Cursor {
   }
 
   left() {
-    if (this.node.children[this.index - 1] != undefined) {
-      if (this.node.classname == "Container") {
+    if (this.node.children[this.index - 1] !== undefined) {
+      if (this.node.classname === "Container") {
         this.node = this.node.children[this.index - 1]
         this.index = this.node.length;
       } else {
         this.index --;
       }
-    } else if (this.node.connection.left != undefined) {
+    } else if (this.node.connection.left !== undefined) {
       this.node = this.node.connection.left;
       this.index = this.node.length;
     }
 
-    if (this.node.children[this.index - 1].classname == "Content") {
+    if (this.node.children[this.index - 1].classname === "Content") {
       this.node = this.node.children[this.index - 1];
       this.index = this.node.length;
     }
   }
 
   right() {
-    if (this.node.children[this.index + 1] != undefined) {
-      if (this.node.classname == "Container") {
+    if (this.node.children[this.index + 1] !== undefined) {
+      if (this.node.classname === "Container") {
         this.node = this.node.children[this.index + 1]
         this.index = 0;
       } else {
         this.index ++;
       }
-    } else if (this.node.connection.left != undefined) {
+    } else if (this.node.connection.left !== undefined) {
       this.node = this.node.connection.left;
       this.index = 0;
     }
 
-    if (this.node.children[this.index + 1].classname == "Content") {
+    if (this.node.children[this.index + 1].classname === "Content") {
       this.node = this.node.children[this.index + 1];
       this.index = 0;
     }
   }
 
   type(content) {
-    if (this.node.classname == "Content") {
+    if (this.node.classname === "Content") {
       this.node.insert(content, this.index);
       this.index ++;
     } else {
@@ -58,13 +58,13 @@ class Cursor {
   }
 
   remove() {
-    if (this.index == this.node.length) {
+    if (this.index === this.node.length) {
       this.node.connection.parent.replace(this.node.children,
         this.node.connection.index);
       this.node = this.node.connection.parent;
       this.index = this.node.connection.index + this.node.children.length;
     } else
-      if (this.node[this.index].classname == "Container")
+      if (this.node[this.index].classname === "Container")
         this.node.replace(this.node[this.index].children, this.index);
       else
         this.node.delete(this.index);
