@@ -19,9 +19,10 @@ Node = CRUD(Node);
 Node = VisualTree(Node);
 
 class Container extends Node {
-  constructor(type, children) {
+  constructor(type, children, attributes) {
     super(children);
     this.type = type;
+    this.attributes = attributes;
     this.classname = "Container";
   }
 }
