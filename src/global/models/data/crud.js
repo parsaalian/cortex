@@ -9,10 +9,10 @@ let NodeReplace = (_super) => class extends _super {
   }
 
   replace(nodes, i, j) {
-    if (j == undefined)
+    if (j === undefined)
       j = i + 1;
-    if (!Array.isArray(children))
-      children = [children];
+    if (!Array.isArray(this.children))
+      this.children = [this.children];
     super.replace(nodes, i, j);
     this.bind(i - 1);
     if (nodes.length > 0) {
@@ -24,7 +24,7 @@ let NodeReplace = (_super) => class extends _super {
 
 let CRUD = (_super) => class extends _super {
   replace(children, i, j) {
-    if (j == undefined)
+    if (j === undefined)
       j = i + 1;
     if (!Array.isArray(children))
       children = [children];

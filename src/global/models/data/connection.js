@@ -14,8 +14,8 @@ let Connector = (_super) => class extends _super {
     for (var c = start; c < this.children.length; c ++) {
       let connection = {
         index: c,
-        next: nodes[c + 1],
-        prev: nodes[c - 1],
+        next: this.children[c + 1],
+        prev: this.children[c - 1],
         parent: this
       }
       this.children[c].setConnection(connection);

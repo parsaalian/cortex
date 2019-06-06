@@ -1,7 +1,10 @@
+let {Content} = require('index');
+
 class Cursor {
   constructor(node, index) {
     this.node = node;
     this.index = index;
+    this.classname = "Cursor";
   }
 
   left() {
@@ -68,21 +71,11 @@ class Cursor {
   }
 
   backspace() {
-    left();
-    remove();
-  }
-}
-
-CursorHandle = (_super) => class extends _super {
-  get visualChildren(cursor) {
-    if (this == cursor.node) {
-      return this.children.splice(cursor.index, 0, cursor);
-    } else
-      return this.children;
+    this.left();
+    this.remove();
   }
 }
 
 module.exports = {
-  CursorHandle: CursorHandle,
   Cursor: Cursor
 }

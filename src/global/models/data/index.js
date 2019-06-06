@@ -1,6 +1,7 @@
 let { Connectable, Connector } = require("./connection");
 let { CRUD, NodeReplace } = require("./crud");
-let { CursorHandle } = require("./cursor");
+let { VisualTree } = require("./visual");
+let { Cursor } = require("./cursor");
 
 class Node {
   constructor(children) {
@@ -9,19 +10,18 @@ class Node {
   }
 
   get length() {
-    this.children.length;
+    return this.children.length;
   }
 }
 
 Node = Connectable(Node);
 Node = CRUD(Node);
-Node = CursorHandle(Node);
+Node = VisualTree(Node);
 
 class Container extends Node {
-  constructor(children, type, attributes) {
-    super(children, type, attributes);
+  constructor(type, children) {
+    super(children);
     this.type = type;
-    this.attributes = attributes;
     this.classname = "Container";
   }
 }
@@ -38,5 +38,6 @@ Container = NodeReplace(Container);
 
 module.exports = {
   Container: Container,
-  Content: Content
+  Content: Content,
+  Cursor: Cursor
 }
