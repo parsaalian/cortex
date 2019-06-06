@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import StateTable from './stateTable';
-import Actions from './actions';
+import _ from "lodash";
+import StateTable from "./stateTable";
+import Actions from "./actions";
 
 export default class StateMachine {
   constructor() {

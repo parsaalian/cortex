@@ -13,17 +13,30 @@
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
-    top: 100%;
+    top: 105%;
     left: 50%;
     margin-left: -60px;
   }
 
   &:hover {
-    border: 1px solid orange;
+    background-color: #66CC66;
     & .wym {
       visibility: visible;
     }
   }
+}
+
+/********************** Spacings *********************/
+.single-spacing {
+  line-height: normal;
+}
+
+.one-half-spacing {
+  line-height: 1.3;
+}
+
+.double-spacing {
+  line-height: 1.6;
 }
 
 /******************** Styling text *******************/
