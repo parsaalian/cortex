@@ -7,7 +7,7 @@ export default class Container extends Component {
     const View = ComponentRegistration.getView(this.props.node.type);
     return (
       <View attributes={this.props.node.attributes}>
-        {this.props.node.visualChildren(this.props.cursor).map(child => <Node node={child} cursor={this.props.cursor} />)}
+        {this.props.node.visualChildren(this.props.cursor).map((child, i) => <Node node={child} key={i} cursor={this.props.cursor} />)}
       </View>
     );
   }

@@ -7,6 +7,10 @@ class Cursor {
     this.classname = "Cursor";
   }
 
+  location() {
+    return this.index;
+  }
+
   left() {
     if (this.node.children[this.index - 1] !== undefined) {
       if (this.node.classname === "Container") {
