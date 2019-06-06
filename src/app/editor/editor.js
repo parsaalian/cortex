@@ -1,10 +1,9 @@
-import React, { Component } from "react";
-import "./editor.scss";
-import Content from "./content/content";
-import Input from "./input/input";
-import styles from "./styles/styles";
-import doc from "./sample";
-import ComponentRegistration from "global/models/componentRegistration/componentRegistration";
+import React, { Component } from 'react';
+import './editor.scss';
+import Node from './compontents/node';
+import styles from './styles/styles';
+import {doc, cursor} from './sample';
+import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
 
 export default class Editor extends Component {
   constructor(props) {
@@ -18,8 +17,8 @@ export default class Editor extends Component {
 
   render() {
     return (
-      <div id="type-target" className="page" ref={node => this.node = node}>
-        {doc.children().map((child, i) => <Content key={i} content={child}/>)}<Input />
+      <div id='type-target' className='page' ref={node => this.node = node}>
+        {doc.visualChildren(cursor).map((child, i) => <Node node={child} key={i} cursor={cursor} />)}
       </div>
     );
   }

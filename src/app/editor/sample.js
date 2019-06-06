@@ -1,5 +1,4 @@
-import Content from "global/models/editorData/content";
-import Container from "global/models/editorData/container";
+import {Container, Content, Cursor} from 'global/models/data';
 
 const doc = new Container("document", [
   new Container("arbitrary-spacing", [
@@ -9,4 +8,6 @@ const doc = new Container("document", [
   new Content("this is a test")
 ]);
 
-export default doc;
+const cursor = new Cursor(doc, 0);
+
+export {doc, cursor};
