@@ -23,6 +23,21 @@ const spacingElements = {
     render() {
       return <Style type="outline" styleObj={{lineHeight: this.props.attributes.lineHeight}}>{this.props.children}</Style>;
     }
+  },
+  "nbsp": class NBSP extends Component {
+    render() {
+      return <Style type="inline">&nbsp;</Style>
+    }
+  },
+  "hfill": class HFill extends Component {
+    render() {
+      return <React.Fragment><Style type="inline" styleObj={{float: "right"}}>{this.props.children}</Style><br/><br/></React.Fragment>
+    }
+  },
+  "vfill": class VFill extends Component {
+    render() {
+      return <Style type="outline" styleObj={{verticalAlign: "bottom"}}>{this.props.children}</Style>
+    }
   }
 }
 
