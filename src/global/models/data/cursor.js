@@ -69,8 +69,7 @@ class Cursor {
       );
       this.node = this.node.connection.parent;
       this.index = this.node.connection.index + this.node.children.length;
-    } else if (this.node[this.index].classname === 'Container')
-      this.node.replace(this.node[this.index].children, this.index);
+    } else if (this.node[this.index].classname === 'Container') this.node.replace(this.node[this.index].children, this.index);
     else this.node.delete(this.index);
   }
 
