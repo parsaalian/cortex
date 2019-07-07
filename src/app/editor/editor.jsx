@@ -44,7 +44,7 @@ export default class Editor extends Component {
   render() {
     return (
       <div id="type-target" className="page">
-        {doc.visualChildren(cursor).map(child => (
+        {doc.visualChildren(cursor).map((child) => (
           <Node node={child} key={child.id} cursor={cursor} />
         ))}
       </div>
