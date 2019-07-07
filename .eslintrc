@@ -1,0 +1,32 @@
+{
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "extends": ["prettier", "airbnb"],
+    "rules": {
+        "class-methods-use-this": "off",
+        "no-tabs": "off",
+        "import/no-unresolved": "off",
+        'import/extensions': 'error',
+        'import/newline-after-import': 'off',
+        'import/no-named-as-default': 'error',
+        'import/no-amd': 'error',
+        'import/no-commonjs': 'off',
+        'import/no-named-default': 'error',
+        'import/no-namespace': 'off',
+        'import/no-nodejs-modules': 'off',
+        'import/order': [
+            1,
+            {
+            groups: [
+                    'builtin',
+                    ['external', 'internal'],
+                    'parent',
+                    ['sibling', 'index'],
+                ],
+            },
+        ],
+    }
+}

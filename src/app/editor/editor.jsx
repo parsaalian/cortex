@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import './editor.scss';
-import Node from './compontents/node';
-import styles from './styles/styles';
-import {doc, cursor} from './sample';
+
 import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
+
+import Node from './compontents/node';
+import styles from './styles';
+import { doc, cursor } from './sample';
 
 export default class Editor extends Component {
   constructor(props) {
     super(props);
     this.startup();
     this.handleType = this.handleType.bind(this);
-  }
-
-  startup() {
-    ComponentRegistration.register(styles);
   }
 
   componentDidMount() {
@@ -24,19 +22,20 @@ export default class Editor extends Component {
     document.removeEventListener('keydown', this.handleType);
   }
 
+  startup() {
+    ComponentRegistration.register(styles);
+  }
+
   handleType(e) {
     if (e.key === 'ArrowLeft') {
       console.log('left');
       cursor.left();
-    }
-    else if (e.key === 'ArrowRight') {
+    } else if (e.key === 'ArrowRight') {
       console.log('right');
       cursor.right();
-    }
-    else if (e.key === 'Backspace') {
+    } else if (e.key === 'Backspace') {
       cursor.backspace();
-    }
-    else {
+    } else {
       cursor.type('fuck?');
     }
     console.log(cursor.location());
@@ -44,8 +43,10 @@ export default class Editor extends Component {
 
   render() {
     return (
-      <div id='type-target' className='page'>
-        {doc.visualChildren(cursor).map((child, i) => <Node node={child} key={i} cursor={cursor} />)}
+      <div id="type-target" className="page">
+        {doc.visualChildren(cursor).map(child => (
+          <Node node={child} key={child.id} cursor={cursor} />
+        ))}
       </div>
     );
   }

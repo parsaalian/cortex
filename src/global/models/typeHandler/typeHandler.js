@@ -1,3 +1,1 @@
-export default class TypeHandler {
-  
-}
+export default class TypeHandler {}

@@ -13,7 +13,7 @@ class HistoryUnit {
 
 export default class HistoryTable {
   constructor() {
-    this.table = []
+    this.table = [];
   }
 
   push(type, state, previous, current) {

@@ -1,6 +1,6 @@
-import _ from "lodash";
-import StateTable from "./stateTable";
-import Actions from "./actions";
+import _ from 'lodash';
+import StateTable from './stateTable';
+import Actions from './actions';
 
 export default class StateMachine {
   constructor() {
@@ -9,6 +9,10 @@ export default class StateMachine {
   }
 
   fetch(...args) {
-    const values = _.transform(args, (result, key) => result.push(this.stateTable.read(key).value), []);
+    const values = _.transform(
+      args,
+      (result, key) => result.push(this.stateTable.read(key).value),
+      [],
+    );
   }
 }

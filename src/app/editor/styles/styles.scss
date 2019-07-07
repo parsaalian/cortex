@@ -101,6 +101,7 @@ $font-sizes: (
     @each $size-type, $size in $sizes {
         .#{size- + $size-type + $size-name} {
             font-size: #{$size * 1.333333}px;
+            display: inline;
         }
     }
 }

@@ -1,7 +1,7 @@
-import React, { Component,Fragment } from 'react';
+import React, { Component } from 'react';
 
 export default class Content extends Component {
   render() {
-    return <Fragment>{this.props.node.children}</Fragment>;
+    return <>{this.props.node.children}</>;
   }
 }

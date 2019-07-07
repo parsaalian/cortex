@@ -1,5 +1,5 @@
-import { stateActions } from "./consts";
-import HistoryTable from "./history";
+import { stateActions } from './consts';
+import HistoryTable from './history';
 
 export class State {
   constructor(value) {
@@ -22,7 +22,7 @@ export default class StateTable {
     this.history = new HistoryTable();
   }
 
-  create(stateName, stateValue, rollback=false) {
+  create(stateName, stateValue, rollback = false) {
     const newState = new State(stateValue);
     if (!rollback) {
       this.history.push(stateActions.CREATE, stateName, null, stateValue);
@@ -34,15 +34,20 @@ export default class StateTable {
     return this.table.get(stateName);
   }
 
-  update(stateName, value, rollback=false) {
+  update(stateName, value, rollback = false) {
     const state = this.table.get(stateName);
     if (!rollback) {
-      this.history.push(stateActions.UPDATE, stateName, state.getValue(), value);
+      this.history.push(
+        stateActions.UPDATE,
+        stateName,
+        state.getValue(),
+        value,
+      );
     }
     state.change(value);
   }
 
-  delete(stateName, rollback=false) {
+  delete(stateName, rollback = false) {
     const state = this.table.get(stateName);
     if (!rollback) {
       this.history.push(stateActions.DELETE, stateName, state.getValue(), null);
@@ -63,12 +68,11 @@ export default class StateTable {
         this.update(lastAction.state, lastAction.previous, true);
         break;
       default:
-
     }
   }
 
   multiRollback(n) {
-    for (var i = 0; i < n; i++) {
+    for (let i = 0; i < n; i++) {
       this.rollback();
     }
   }
