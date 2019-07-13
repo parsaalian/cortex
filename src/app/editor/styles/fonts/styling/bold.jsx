@@ -1,12 +1,19 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function Bold({ children }) {
+function Bold({ children, classes }) {
   return (
-    <Style display="inline" styleName="bold">
+    <Style display="inline" styles={classes.bold}>
       {children}
     </Style>
   );
 }
+
+export default withStyles({
+  bold: {
+    fontWeight: 'bold',
+  },
+})(Bold);

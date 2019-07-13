@@ -1,12 +1,19 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function Uppercase({ children }) {
+function Uppercase({ children, classes }) {
   return (
-    <Style display="inline" styleName="uppercase">
+    <Style display="inline" styles={classes}>
       {children}
     </Style>
   );
 }
+
+export default withStyles({
+  uppercase: {
+    textTransform: 'uppercase',
+  },
+})(Uppercase);

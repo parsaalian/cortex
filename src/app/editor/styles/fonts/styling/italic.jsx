@@ -1,12 +1,19 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function Italic({ children }) {
+function Italic({ children, classes }) {
   return (
-    <Style display="inline" styleName="italic">
+    <Style display="inline" styles={classes.italic}>
       {children}
     </Style>
   );
 }
+
+export default withStyles({
+  italic: {
+    fontStyle: 'italic',
+  },
+})(Italic);

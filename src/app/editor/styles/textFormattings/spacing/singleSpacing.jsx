@@ -1,19 +1,19 @@
 /* eslint react/prop-types: off */
 import React from 'react';
-import injectSheet from 'react-jss';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
 function SingleSpacing({ children, classes }) {
   return (
-    <Style display="block" className={classes.singleSpace}>
+    <Style display="block" styles={classes.singleSpacing}>
       {children}
     </Style>
   );
 }
 
-export default injectSheet({
-  singleSpace: {
-    lineHeight: '2',
+export default withStyles({
+  singleSpacing: {
+    lineHeight: 'normal',
   },
 })(SingleSpacing);

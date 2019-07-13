@@ -1,15 +1,20 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function Bold({ children, attributes }) {
+function ArbitrarySize({ children, classes }) {
   return (
-    <Style
-      type="inline"
-      style={{ fontSize: `${attributes.size * 1.333333}px` }}
-    >
+    <Style type="inline" styles={classes.arbitrarySize}>
       {children}
     </Style>
   );
 }
+
+export default withStyles({
+  arbitrarySize: {
+    fontSize: (props) =>
+      props.attributes ? `${props.attributes.size * 1.333333}px` : '1rem',
+  },
+})(ArbitrarySize);

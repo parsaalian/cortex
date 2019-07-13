@@ -1,12 +1,19 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function SansSerifFont({ children }) {
+function SansSerifFont({ children, classes }) {
   return (
-    <Style display="inline" styleName="sans-serif-font">
+    <Style display="inline" styles={classes.sansSerifFont}>
       {children}
     </Style>
   );
 }
+
+export default withStyles({
+  sansSerifFont: {
+    fontFamily: '"Source Sans Pro", Helvetica, Verdana, sans-serif',
+  },
+})(SansSerifFont);

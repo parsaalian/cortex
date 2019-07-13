@@ -1,9 +1,11 @@
+/* eslint react/prop-types: off */
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import withStyles from 'react-jss';
 
 import WYM from './wym';
 
-export default class Style extends Component {
+class Style extends Component {
   constructor(props) {
     super(props);
     this.state = { wymExpanded: false };
@@ -19,40 +21,55 @@ export default class Style extends Component {
   }
 
   render() {
-    const {
-      // eslint-disable-next-line react/prop-types
-      display,
-      // eslint-disable-next-line react/prop-types
-      styleName,
-      // eslint-disable-next-line react/prop-types
-      styleObj,
-      // eslint-disable-next-line react/prop-types
-      children,
-    } = this.props;
+    const { display, name, styles, classes, children } = this.props;
     const { wymExpanded } = this.state;
     switch (display) {
       case 'inline':
-        return styleName || styleObj ? (
+        return styles || name ? (
           <span
-            className={classNames(styleName, 'wys')}
+            className={classNames(classes.wys, styles)}
             onClick={this.expandWYM}
-            style={styleObj}
             role="presentation"
           >
             {children}
-            <WYM wym={styleName} expand={wymExpanded} />
+            <WYM wym={name} expand={wymExpanded} />
           </span>
         ) : (
           <>{children}</>
         );
       default:
-        return styleName || styleObj ? (
-          <div className={styleName} style={styleObj}>
-            {children}
-          </div>
+        return styles ? (
+          <div className={styles}>{children}</div>
         ) : (
           <>{children}</>
         );
     }
   }
 }
+
+export default withStyles({
+  wys: {
+    position: 'relative',
+    '& .wym': {
+      fontSize: 14,
+      visibility: 'hidden',
+      backgroundColor: 'black',
+      color: '#fff',
+      textAlign: 'center',
+      borderRadius: 6,
+      padding: '6px 6px',
+      /* Position the tooltip */
+      position: 'absolute',
+      zIndex: '1',
+      top: '105%',
+      left: '50%',
+      marginLeft: -60,
+    },
+    '&:hover': {
+      backgroundColor: '#66CC66',
+      '& .wym': {
+        visibility: 'visible',
+      },
+    },
+  },
+})(Style);

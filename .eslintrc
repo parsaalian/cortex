@@ -28,6 +28,9 @@
                 ],
             },
         ],
-        "arrow-parens": "off"
+        "arrow-parens": "off",
+        "object-curly-newline": "off",
+        "implicit-arrow-linebreak": "off",
+        "no-confusing-arrow": "off"
     }
 }

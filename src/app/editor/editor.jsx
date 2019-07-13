@@ -1,6 +1,6 @@
 /* eslint react/prop-types: off */
 import React, { Component } from 'react';
-import injectSheet from 'react-jss';
+import withStyles from 'react-jss';
 
 import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
 
@@ -51,7 +51,7 @@ class Editor extends Component {
   }
 }
 
-export default injectSheet({
+export default withStyles({
   page: {
     border: '1px solid black',
     width: 400,

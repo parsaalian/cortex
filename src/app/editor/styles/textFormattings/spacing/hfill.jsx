@@ -1,12 +1,13 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import withStyles from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function HFill({ children }) {
+function HFill({ children, classes }) {
   return (
     <>
-      <Style display="inline" styleObj={{ float: 'right' }}>
+      <Style display="inline" styles={classes.hfill}>
         {children}
       </Style>
       <br />
@@ -14,3 +15,9 @@ export default function HFill({ children }) {
     </>
   );
 }
+
+export default withStyles({
+  hfill: {
+    float: 'right',
+  },
+})(HFill);
