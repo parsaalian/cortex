@@ -1,12 +1,19 @@
+/* eslint react/prop-types: off */
 import React from 'react';
+import injectSheet from 'react-jss';
 
 import Style from '../../style';
 
-// eslint-disable-next-line react/prop-types
-export default function SingleSpacing({ children }) {
+function SingleSpacing({ children, classes }) {
   return (
-    <Style display="block" styleName="single-spacing">
+    <Style display="block" className={classes.singleSpace}>
       {children}
     </Style>
   );
 }
+
+export default injectSheet({
+  singleSpace: {
+    lineHeight: '2',
+  },
+})(SingleSpacing);

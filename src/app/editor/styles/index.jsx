@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import Text from './base/text';
 import Paragraph from './base/paragraph';
 

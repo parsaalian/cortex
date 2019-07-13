@@ -17,7 +17,7 @@ class Cursor {
         this.node = this.node.children[this.index - 1];
         this.index = this.node.length;
       } else {
-        this.index--;
+        this.index -= 1;
       }
     } else if (this.node.connection.left !== undefined) {
       this.node = this.node.connection.left;
@@ -36,7 +36,7 @@ class Cursor {
         this.node = this.node.children[this.index + 1];
         this.index = 0;
       } else {
-        this.index++;
+        this.index += 1;
       }
     } else if (this.node.connection.left !== undefined) {
       this.node = this.node.connection.left;
@@ -52,7 +52,7 @@ class Cursor {
   type(content) {
     if (this.node.classname === 'Content') {
       this.node.insert(content, this.index);
-      this.index++;
+      this.index += 1;
     } else {
       // TODO: redesign to avoid forward reference
       this.node.insert(new Content(content), this.index);
@@ -69,8 +69,9 @@ class Cursor {
       );
       this.node = this.node.connection.parent;
       this.index = this.node.connection.index + this.node.children.length;
-    } else if (this.node[this.index].classname === 'Container') this.node.replace(this.node[this.index].children, this.index);
-    else this.node.delete(this.index);
+    } else if (this.node[this.index].classname === 'Container') {
+      this.node.replace(this.node[this.index].children, this.index);
+    } else this.node.delete(this.index);
   }
 
   backspace() {

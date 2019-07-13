@@ -1,5 +1,6 @@
+/* eslint react/prop-types: off */
 import React, { Component } from 'react';
-import './editor.scss';
+import injectSheet from 'react-jss';
 
 import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
 
@@ -7,7 +8,7 @@ import Node from './compontents/node';
 import styles from './styles';
 import { doc, cursor } from './sample';
 
-export default class Editor extends Component {
+class Editor extends Component {
   constructor(props) {
     super(props);
     this.startup();
@@ -28,22 +29,20 @@ export default class Editor extends Component {
 
   handleType(e) {
     if (e.key === 'ArrowLeft') {
-      console.log('left');
       cursor.left();
     } else if (e.key === 'ArrowRight') {
-      console.log('right');
       cursor.right();
     } else if (e.key === 'Backspace') {
       cursor.backspace();
     } else {
       cursor.type('fuck?');
     }
-    console.log(cursor.location());
   }
 
   render() {
+    const { classes } = this.props;
     return (
-      <div id="type-target" className="page">
+      <div id="type-target" className={classes.page}>
         {doc.visualChildren(cursor).map((child) => (
           <Node node={child} key={child.id} cursor={cursor} />
         ))}
@@ -51,3 +50,17 @@ export default class Editor extends Component {
     );
   }
 }
+
+export default injectSheet({
+  page: {
+    border: '1px solid black',
+    width: 400,
+    height: 640,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 100,
+    padding: '1rem',
+    textAlign: 'justify',
+    overflowWrap: 'break-word',
+  },
+})(Editor);
