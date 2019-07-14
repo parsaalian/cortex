@@ -1,6 +1,6 @@
 export default {
   pageSize: {
-    type: 'a5',
+    type: 'a4',
   },
   edit: {
     copied: '',
