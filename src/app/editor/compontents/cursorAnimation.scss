@@ -18,11 +18,3 @@
   50%  { opacity:0; }
   100% { opacity:1; }
 }
-.cursor {
-  border: 1px solid black;
-  margin-left: 2px;
-  -webkit-animation: flickerAnimation 1s infinite;
-  -moz-animation: flickerAnimation 1s infinite;
-  -o-animation: flickerAnimation 1s infinite;
-  animation: flickerAnimation 1s infinite;
-}

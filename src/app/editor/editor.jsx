@@ -61,6 +61,13 @@ export default withStyles({
     marginTop: 100,
     padding: '1rem',
     textAlign: 'justify',
-    overflowWrap: 'break-word',
+    '& *': {
+      overflowWrap: 'break-word',
+      '-ms-word-break': 'break-all',
+      wordBreak: 'break-all',
+      '-webkit-hyphens': 'auto',
+      '-moz-hyphens': 'auto',
+      hyphens: 'auto',
+    },
   },
 })(Editor);
