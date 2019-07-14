@@ -23,8 +23,8 @@ class Page extends Component {
 export default withStyles({
   page: {
     border: '1px solid black',
-    width: 400,
-    height: 640,
+    width: props => props.size.width,
+    height: props => props.size.height,
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: 100,

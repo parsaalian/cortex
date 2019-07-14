@@ -1,5 +1,5 @@
 const { Connectable, Connector } = require('./connection');
-const { CRUD, NodeReplace } = require('./crud');
+const { CRUD, ContainerReplace } = require('./crud');
 const { VisualTree } = require('./visual');
 const { Cursor } = require('./cursor');
 
@@ -35,7 +35,7 @@ class Content extends Node {
 }
 
 Container = Connector(Container);
-Container = NodeReplace(Container);
+Container = ContainerReplace(Container);
 
 module.exports = {
   Container,

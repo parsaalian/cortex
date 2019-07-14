@@ -1,7 +1,8 @@
 /* eslint react/prop-types: off */
 import React, { Component } from 'react';
 
-import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
+import ComponentRegistration from 'global/models/componentRegistration';
+import StateStorage from 'global/models/stateStorage';
 
 import Page from './page';
 import styles from './styles';
@@ -39,6 +40,7 @@ export default class Editor extends Component {
   }
 
   render() {
-    return <Page doc={doc} cursor={cursor} />;
+    const size = StateStorage.get(['pageSizes', StateStorage.get(['pageSize', 'type'])]);
+    return <Page doc={doc} cursor={cursor} size={size} />;
   }
 }

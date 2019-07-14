@@ -1,51 +1,52 @@
-const NodeReplace = (_super) =>
-  class extends _super {
-    bind(i) {
-      const a = this.children[i];
-      const b = this.children[i + 1];
-      if (typeof a === typeof b) {
-        this.children.splice(i, 1);
-        a.insert(b.children, b.length);
-      }
+const ContainerReplace = (_super) => class extends _super {
+  bind(i) {
+    const a = this.children[i];
+    const b = this.children[i + 1];
+    if (a && b && a.classname === b.classname && a.type === b.type) {
+      console.log('Bedooz ', a, b);
+      this.children.splice(i - 1, 1);
+      a.insert(b.children, a.length);
     }
+  }
 
-    replace(nodes, i, j) {
-      if (j === undefined) j = i + 1;
-      if (!Array.isArray(this.children)) this.children = [this.children];
-      super.replace(nodes, i, j);
-      this.bind(i - 1);
-      if (nodes.length > 0) {
-        this.bind(i + nodes.length - 1);
-      }
-      this.connect(i - 1);
+  replace(children, i, j) {
+    if (j === undefined) j = i + 1;
+    if (!Array.isArray(children)) children = [children];
+    this.children.splice(i, j - i, ...children);
+    this.bind(i - 1);
+    if (children.length > 0) {
+      this.bind(i + children.length - 1);
     }
-  };
+    this.connect(i > 0 ? i - 1 : 0);
+  }
+};
 
-const CRUD = (_super) =>
-  class extends _super {
-    replace(children, i, j) {
-      if (j === undefined) j = i + 1;
-      if (!Array.isArray(children)) children = [children];
-      this.children.splice(i, j - i, ...children);
-      if (this.length === 0) {
-        this.sucide();
-      }
+const ContentReplace = (_super) => class extends _super {
+  replace(children, i, j) {
+    if (j === undefined) j = i + 1;
+    this.children = this.children.slice(0, i) + children + this.children.slice(j);
+    if (this.length === 0) {
+      this.suicide();
     }
+  }
+};
 
-    sucide() {
-      this.connection.parent.delete(this.connection.index);
-    }
+const CRUD = (_super) => class extends _super {
+  suicide() {
+    this.connection.parent.remove(this.connection.index);
+  }
 
-    insert(children, i) {
-      this.replace(children, i, i);
-    }
+  insert(children, i) {
+    this.replace(children, i, i);
+  }
 
-    remove(i, j) {
-      this.replace([], i, j);
-    }
-  };
+  remove(i, j) {
+    this.replace([], i, j);
+  }
+};
 
 module.exports = {
-  NodeReplace,
+  ContainerReplace,
+  ContentReplace,
   CRUD,
 };
