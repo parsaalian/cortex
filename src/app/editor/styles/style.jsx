@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import withStyles from 'react-jss';
 
+import { hyphen } from '../_global/styles';
 import WYM from './wym';
 
 class Style extends Component {
@@ -27,7 +28,7 @@ class Style extends Component {
       case 'inline':
         return styles || name ? (
           <span
-            className={classNames(classes.wys, styles)}
+            className={classNames(classes.wys, classes.hyphen, styles)}
             onClick={this.expandWYM}
             role="presentation"
           >
@@ -39,7 +40,7 @@ class Style extends Component {
         );
       default:
         return styles ? (
-          <div className={styles}>{children}</div>
+          <div className={classNames(styles, classes.hyphen)}>{children}</div>
         ) : (
           <>{children}</>
         );
@@ -48,6 +49,7 @@ class Style extends Component {
 }
 
 export default withStyles({
+  hyphen,
   wys: {
     position: 'relative',
     '& .wym': {

@@ -17,10 +17,11 @@ function WYM({ wym, expand }) {
 export default withProps(
   WYM,
   {
-    wym: PropTypes.string.isRequired,
+    wym: PropTypes.string,
     expand: PropTypes.bool,
   },
   {
+    wym: '',
     expand: false,
   },
 );

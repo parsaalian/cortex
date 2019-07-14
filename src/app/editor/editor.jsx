@@ -1,14 +1,13 @@
 /* eslint react/prop-types: off */
 import React, { Component } from 'react';
-import withStyles from 'react-jss';
 
 import ComponentRegistration from 'global/models/componentRegistration/componentRegistration';
 
-import Node from './compontents/node';
+import Page from './page';
 import styles from './styles';
 import { doc, cursor } from './sample';
 
-class Editor extends Component {
+export default class Editor extends Component {
   constructor(props) {
     super(props);
     this.startup();
@@ -40,34 +39,6 @@ class Editor extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    return (
-      <div id="type-target" className={classes.page}>
-        {doc.visualChildren(cursor).map((child) => (
-          <Node node={child} key={child.id} cursor={cursor} />
-        ))}
-      </div>
-    );
+    return <Page doc={doc} cursor={cursor} />;
   }
 }
-
-export default withStyles({
-  page: {
-    border: '1px solid black',
-    width: 400,
-    height: 640,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: 100,
-    padding: '1rem',
-    textAlign: 'justify',
-    '& *': {
-      overflowWrap: 'break-word',
-      '-ms-word-break': 'break-all',
-      wordBreak: 'break-all',
-      '-webkit-hyphens': 'auto',
-      '-moz-hyphens': 'auto',
-      hyphens: 'auto',
-    },
-  },
-})(Editor);

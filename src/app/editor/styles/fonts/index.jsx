@@ -1,7 +1,3 @@
-import PropTypes from 'prop-types';
-
-import withProps from 'global/views/withProps';
-
 import NormalFont from './styling/normalFont';
 import RomanFont from './styling/romanFont';
 import SansSerifFont from './styling/sansSerifFont';
@@ -16,24 +12,20 @@ import BuiltInSizes from './sizing/builtInSizes';
 import ArbitrarySize from './sizing/arbitrarySize';
 
 const stylingElements = {
-  'normal-font': withProps(NormalFont),
-  'roman-font': withProps(RomanFont),
-  'sans-serif-font': withProps(SansSerifFont),
-  'mono-font': withProps(MonoFont),
-  italic: withProps(Italic),
-  'small-capitals': withProps(SmallCapitals),
-  uppercase: withProps(Uppercase),
-  bold: withProps(Bold),
-  light: withProps(Light),
+  'normal-font': NormalFont,
+  'roman-font': RomanFont,
+  'sans-serif-font': SansSerifFont,
+  'mono-font': MonoFont,
+  italic: Italic,
+  'small-capitals': SmallCapitals,
+  uppercase: Uppercase,
+  bold: Bold,
+  light: Light,
 };
 
 const sizingElements = {
   ...BuiltInSizes,
-  'arbitrary-size': withProps(
-    ArbitrarySize,
-    { attributes: PropTypes.Object },
-    { attributes: { lineHeight: 1 } },
-  ),
+  'arbitrary-size': ArbitrarySize,
 };
 
 export default { ...sizingElements, ...stylingElements };
