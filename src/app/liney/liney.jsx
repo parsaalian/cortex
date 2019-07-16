@@ -2,6 +2,8 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 
+import typeHandler from 'models/middlewares/typeHandler';
+
 function Line({ textArray, id, setRef, show }) {
   return (
     <div
@@ -40,6 +42,8 @@ export default class Liney extends Component {
   }
 
   componentDidMount() {
+    document.addEventListener('keydown', this.handleType);
+
     const { text } = this.state;
     console.log(text[0].split(' ').length);
 
@@ -51,6 +55,10 @@ export default class Liney extends Component {
 
   setRef(key, ref) {
     this[key] = ref;
+  }
+
+  handleType(e) {
+    typeHandler.logKey(e);
   }
 
   decomposeLine(line) {
