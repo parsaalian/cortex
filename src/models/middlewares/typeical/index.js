@@ -1,5 +1,6 @@
 import keyMap from './keyMap';
 import ActionStorage from './actionStorage';
+import { INS, DEL, SPC, ENT, MV, MET } from './consts';
 
 class Typeical {
   constructor() {
@@ -7,28 +8,46 @@ class Typeical {
     this.actions = new ActionStorage(this);
   }
 
-  logKey(e) {
-    this.actions.get(e.keyCode)(e);
+  get(e) {
+    return this.actions.get(e.keyCode)(e);
   }
 
   type(value) {
-    console.log(value);
+    return {
+      type: INS,
+      value,
+    };
   }
 
   delete() {
-    console.log('delete');
-  }
-
-  enter() {
-    console.log('enter');
+    return {
+      type: DEL,
+    };
   }
 
   space() {
-    console.log('space');
+    return {
+      type: SPC,
+    };
+  }
+
+  enter() {
+    return {
+      type: ENT,
+    };
   }
 
   move(direction) {
-    console.log('move ', direction);
+    return {
+      type: MV,
+      direction,
+    };
+  }
+
+  meta() {
+    return {
+      type: MET,
+    };
   }
 }
 
