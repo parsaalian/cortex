@@ -1,52 +1,40 @@
-import _ from 'lodash';
+import Cursor from './cursor';
+import Page from './page';
 
-import sizing from '../middlewares/sizing';
+// const maxWidth = 816;
 
-const maxWidth = 816;
-const BR = 'break';
-
-class Data {
+class Document {
   constructor() {
-    this.words = [{ word: '', width: 0, taken: 0 }];
+    this.pages = [new Page()];
   }
 
-  getText() {
-    return this.words;
-  }
-
-  insert(char) {
-    const lastWord = _.last(this.words);
-    if (lastWord.taken + char.width > maxWidth) {
-      lastWord.word += char.value;
-      lastWord.width += char.width;
-      lastWord.taken = lastWord.width;
-      this.words = [...this.words.slice(0, this.words.length - 1), BR, lastWord];
-    } else {
-      lastWord.word += char.value;
-      lastWord.width += char.width;
-      lastWord.taken += char.width;
-    }
+  insert(value) {
+    this.pages[Cursor.page].insertValue(value);
+    console.log(JSON.stringify(this.getText()));
+    console.log(Cursor);
   }
 
   space() {
-    const lastWord = _.last(this.words);
-    this.words.push({ word: '', width: 0, taken: lastWord.taken + 4.2 });
+    this.pages[Cursor.page].space();
+    console.log(JSON.stringify(this.getText()));
+    console.log(Cursor);
   }
 
-  enter() {
-    this.words.push(BR);
-    this.words.push({ word: '', width: 0, taken: 0 });
-  }
-
-  delete() {
-    const lastWord = _.last(this.words);
-    if (lastWord.word === '' || lastWord === BR) {
-      this.words.pop();
-    } else {
-      lastWord.word = lastWord.word.slice(0, lastWord.word.length - 1);
-      lastWord.width = sizing(lastWord.word.width).width;
+  move(direction) {
+    switch (direction) {
+      case 'l':
+        Cursor.prevChar();
+        break;
+      case 'r':
+        Cursor.nextChar();
+        break;
+      default:
     }
+  }
+
+  getText() {
+    return this.pages.map((page) => page.get());
   }
 }
 
-export default new Data();
+export default new Document();

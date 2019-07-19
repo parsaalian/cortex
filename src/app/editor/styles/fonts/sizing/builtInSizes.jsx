@@ -3,8 +3,6 @@ import _ from 'lodash';
 import React from 'react';
 import withStyles from 'react-jss';
 
-import withProps from 'global/views/withProps';
-
 import Style from '../../style';
 
 const builtInSizesNames = [
@@ -125,15 +123,12 @@ export default _.reduce(
     }
     Element.displayName = `${value}Size`;
     // eslint-disable-next-line no-param-reassign
-    result[`size-${value.toLowerCase()}`] = withProps(
-      withStyles({
-        [`size${value}`]: {
-          display: 'inline',
-          fontSize:
-            Math.round(sizes[value.toLowerCase()].std11 * 1.33333 * 100) / 100,
-        },
-      })(Element),
-    );
+    result[`size-${value.toLowerCase()}`] = withStyles({
+      [`size${value}`]: {
+        display: 'inline',
+        fontSize: Math.round(sizes[value.toLowerCase()].std11 * 1.33333 * 100) / 100,
+      },
+    })(Element);
     return result;
   },
   {},

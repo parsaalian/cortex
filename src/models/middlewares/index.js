@@ -1,9 +1,8 @@
-import Data from '../data';
+import Document from '../data';
 
 import Typeical from './typeical';
-import sizing from './sizing';
 
-import { INS, SPC, DEL, ENT } from './typeical/consts';
+import { INS, SPC, DEL, ENT, MV } from './typeical/consts';
 
 class Middleware {
   input(event) {
@@ -21,25 +20,31 @@ class Middleware {
       case ENT:
         this.enter();
         break;
+      case MV:
+        this.move(action.direction);
+        break;
       default:
     }
   }
 
   insert(value) {
-    const size = sizing(value);
-    Data.insert({ value, width: size.width });
+    Document.insert(value);
   }
 
   space() {
-    Data.space();
+    Document.space();
   }
 
   enter() {
-    Data.enter();
+    Document.enter();
   }
 
   delete() {
-    Data.delete();
+    Document.delete();
+  }
+
+  move(direction) {
+    Document.move(direction);
   }
 }
 
