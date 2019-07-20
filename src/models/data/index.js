@@ -1,8 +1,6 @@
 import Cursor from './cursor';
 import Page from './page';
 
-// const maxWidth = 816;
-
 class Document {
   constructor() {
     this.pages = [new Page()];
@@ -10,13 +8,11 @@ class Document {
 
   insert(value) {
     this.pages[Cursor.page].insertValue(value);
-    console.log(JSON.stringify(this.getText()));
     console.log(Cursor);
   }
 
   space() {
     this.pages[Cursor.page].space();
-    console.log(JSON.stringify(this.getText()));
     console.log(Cursor);
   }
 
@@ -32,8 +28,12 @@ class Document {
     }
   }
 
-  getText() {
-    return this.pages.map((page) => page.get());
+  get() {
+    const data = this.pages.map((page) => page.get());
+    let word = data[Cursor.page][Cursor.line][Cursor.word];
+    word = [...word.slice(0, Cursor.char), 'cursor', ...word.slice(Cursor.char)];
+    data[Cursor.page][Cursor.line][Cursor.word] = word;
+    return data;
   }
 }
 

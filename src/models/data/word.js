@@ -1,7 +1,7 @@
 import Cursor from './cursor';
 
 export default class Word {
-  constructor(parent, wordIndex = 0, content = '') {
+  constructor(parent, wordIndex = 0, content = []) {
     this.parent = parent;
     this.wordIndex = wordIndex;
     this.content = content;
@@ -15,7 +15,7 @@ export default class Word {
 
   insertValue(value) {
     const charNumber = Cursor.char;
-    this.content = this.content.slice(0, charNumber) + value + this.content.slice(charNumber);
+    this.content = [...this.content.slice(0, charNumber), value, ...this.content.slice(charNumber)];
     Cursor.nextChar();
   }
 

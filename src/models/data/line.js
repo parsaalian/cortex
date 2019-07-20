@@ -24,8 +24,8 @@ export default class Line {
       this.words.push(new Word(this, Cursor.word + 1));
       this.length += 1;
     } else {
-      const word1 = word.content.substring(0, Cursor.char);
-      const word2 = word.content.substring(Cursor.char);
+      const word1 = word.content.slice(0, Cursor.char);
+      const word2 = word.content.slice(Cursor.char);
       this.words = [
         ...this.words.slice(0, Cursor.word),
         new Word(this, Cursor.word, word1),
