@@ -1,7 +1,7 @@
 /* eslint react/prop-types: off */
 /* eslint react/no-array-index-key: off */
 import React from 'react';
-import ComponentRegistration from 'global/models/componentRegistration';
+import ComponentRegistration from 'models/utils/componentRegistration';
 import Node from './node';
 
 export default function Container({ node, cursor }) {

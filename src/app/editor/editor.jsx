@@ -1,8 +1,8 @@
 /* eslint react/prop-types: off */
 import React, { Component } from 'react';
 
-import ComponentRegistration from 'global/models/componentRegistration';
-import StateStorage from 'global/models/stateStorage';
+import ComponentRegistration from 'models/utils/componentRegistration';
+import StateStorage from 'global/models/models/stores/document';
 
 import Page from './page';
 import styles from './styles';
