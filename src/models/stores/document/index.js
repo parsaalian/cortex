@@ -4,7 +4,7 @@ import statics from './statics';
 import dynamics from './dynamics';
 import temporals from './temporals';
 
-class StateStorage {
+class DocumentStore {
   constructor() {
     this.statics = statics;
     this.dynamics = dynamics;
@@ -12,10 +12,7 @@ class StateStorage {
   }
 
   set(path, newValue) {
-    if (
-      _.has(this.statics, path)
-      || _.has(this.temporals, path)
-    ) {
+    if (_.has(this.statics, path) || _.has(this.temporals, path)) {
       throw new Error('Only dynamic types can change.');
     } else if (!_.has(this.dynamics, path)) {
       throw new Error('State does not exist.');
@@ -28,11 +25,7 @@ class StateStorage {
     if (type !== null) {
       return _.get(_.get(this, [type]), path);
     }
-    if (
-      !_.has(this.statics, path)
-      && !_.has(this.dynamics, path)
-      && !_.has(this.temporals, path)
-    ) {
+    if (!_.has(this.statics, path) && !_.has(this.dynamics, path) && !_.has(this.temporals, path)) {
       throw new Error('State does not exist.');
     } else if (_.has(this.temporals, path)) {
       return _.get(this.temporals, path)();
@@ -43,4 +36,4 @@ class StateStorage {
   }
 }
 
-export default new StateStorage();
+export default new DocumentStore();
