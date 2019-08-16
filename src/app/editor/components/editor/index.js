@@ -6,8 +6,8 @@ import Middleware from 'models/middlewares';
 import ComponentRegistration from 'models/utils/componentRegistration';
 import StateStorage from 'models/stores/document';
 
-import Page from './compontents/page';
-import styles from './styles';
+import Page from '../page';
+import styles from '../styles';
 
 export default class Editor extends Component {
   constructor(props) {

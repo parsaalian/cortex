@@ -2,8 +2,6 @@
 import React from 'react';
 import withStyles from 'react-jss';
 
-import './cursor.scss';
-
 function Line({ word, classes }) {
   return (
     <>

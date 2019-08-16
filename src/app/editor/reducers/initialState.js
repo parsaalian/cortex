@@ -1,3 +1,4 @@
+// @flow
 import { NORMAL } from '../constants';
 
 export default {
@@ -19,11 +20,11 @@ export default {
     cursor: [0, 0, 0, 0],
     pages: [
       {
-        lines: [
+        lineGroups: [
           {
             type: NORMAL,
             level: 0,
-            groups: [
+            wordGroups: [
               {
                 type: NORMAL,
                 characters: [],

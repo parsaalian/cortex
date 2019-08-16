@@ -1,9 +1,10 @@
 {
-  "name": "temp",
+  "name": "cortex",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
+    "jss": "^9.8.7",
     "lodash": "^4.17.15",
     "node-sass": "^4.12.0",
     "prop-types": "^15.7.2",
@@ -16,12 +17,13 @@
     "typescript": "^3.5.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run flow && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --fix;exit 0",
-    "prettier": "prettier --config .prettierrc \"src/**/*.{js,jsx}\" --write"
+    "prettier": "prettier --config .prettierrc \"src/**/*.{js,jsx}\" --write",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,11 +41,17 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-flow": "^7.0.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-flowtype": "^4.2.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2"
+    "eslint-plugin-react": "^7.14.2",
+    "flow-bin": "^0.105.2",
+    "flow-typed": "^2.6.1"
   }
 }

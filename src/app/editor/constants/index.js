@@ -1,3 +1,4 @@
+// @flow
 // style constants
 export const NORMAL = 'NORMAL';
 

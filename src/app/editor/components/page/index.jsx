@@ -2,7 +2,7 @@
 import React from 'react';
 import withStyles from 'react-jss';
 
-import Line from './line';
+import Line from '../line';
 
 function Page({ page, classes }) {
   return (

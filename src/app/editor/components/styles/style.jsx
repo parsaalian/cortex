@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import withStyles from 'react-jss';
 
-import { hyphen, ligature } from '../_global/styles';
 import WYM from './wym';
 
 class Style extends Component {
@@ -49,8 +48,6 @@ class Style extends Component {
 }
 
 export default withStyles({
-  hyphen,
-  ligature,
   wys: {
     position: 'relative',
     '& .wym': {

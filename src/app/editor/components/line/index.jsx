@@ -2,7 +2,7 @@
 import React from 'react';
 import withStyles from 'react-jss';
 
-import Word from './word';
+import Word from '../word';
 import './cursor.scss';
 
 function Line({ line, classes }) {
