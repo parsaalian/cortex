@@ -1,10 +1,8 @@
-import _ from 'lodash';
-
 function createElement(text, style) {
   const element = document.createElement('div');
   const textNode = document.createTextNode(text);
   element.appendChild(textNode);
-  _.forEach(style, (value, key) => {
+  style.forEach((value, key) => {
     element.style[key] = value;
   });
   element.style.position = 'absolute';

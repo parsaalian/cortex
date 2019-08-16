@@ -1,15 +1,12 @@
 /* eslint {react/prop-types: off, react/no-array-index-key: off} */
 import React, { Component } from 'react';
 
-import Data from 'models/data';
-import Middleware from 'models/middlewares';
-import ComponentRegistration from 'models/utils/componentRegistration';
-import StateStorage from 'models/stores/document';
+import Data from 'utils/data';
+import Middleware from 'utils/middlewares';
 
-import Page from '../page';
-import styles from '../styles';
+import Page from './page';
 
-export default class Editor extends Component {
+export default class Document extends Component {
   constructor(props) {
     super(props);
     this.state = { text: Data.get() };
@@ -32,19 +29,21 @@ export default class Editor extends Component {
     });
   }
 
-  startup() {
-    ComponentRegistration.register(styles);
-  }
-
   render() {
     const { text } = this.state;
-    const size = StateStorage.get(['pageSizes', StateStorage.get(['pageSize', 'type'])]);
     return (
-      <>
+      <React.Fragment>
         {text.map((page, i) => (
-          <Page key={i} page={page} size={size} />
+          <Page
+            key={i}
+            page={page}
+            size={{
+              width: '559px',
+              height: '794px',
+            }}
+          />
         ))}
-      </>
+      </React.Fragment>
     );
   }
 }
