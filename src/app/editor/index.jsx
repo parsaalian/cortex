@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Document from './components/document';
-import StylePicker from './components/stylePicker';
+import StylePicker from './containers/stylePicker';
 
 import startup from './utils/startup';
 

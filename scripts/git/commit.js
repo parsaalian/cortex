@@ -26,6 +26,6 @@ if (!commander.type || !commander.message) {
     });
   } else {
     console.log('Your string must match the following pattern:');
-    console.log('(chore|feat|docs|fix|refactor|style|test|sonar|hack|release)(:)( )(.{0,80})');
+    console.log('(chore|feat|docs|fix|refactor|style|test)(:)( )(.{0,80})');
   }
 }
