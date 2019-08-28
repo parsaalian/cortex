@@ -25,7 +25,7 @@
   },
   "scripts": {
     "build": "react-scripts build",
-    "commit": "node ./scripts/git/commit.js",
+    "commit": "node ./tasks/git/commit.js",
     "start": "npm run flow && react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
