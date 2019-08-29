@@ -8,6 +8,7 @@ import { moveCursor, changeStyle, typeChar, removeChar } from '../actions/editor
 export const cursorReducer = createReducer({
   [moveCursor]: (state: StateType, payload: MoveCursorType): StateType => {
     const { direction } = payload;
+    return state;
   },
 });
 
@@ -15,6 +16,7 @@ export const cursorReducer = createReducer({
 export const styleReducer = createReducer({
   [changeStyle]: (state: StateType, payload: ChangeStyleType): StateType => {
     const { style } = payload;
+    return state;
   },
 });
 
@@ -22,7 +24,10 @@ export const styleReducer = createReducer({
 export const typingReducer = createReducer({
   [typeChar]: (state: StateType, payload: TypeCharType): StateType => {
     const { char } = payload;
+    return state;
   },
 
-  [removeChar]: (state: StateType): StateType => {},
+  [removeChar]: (state: StateType): StateType => {
+    return state;
+  },
 });

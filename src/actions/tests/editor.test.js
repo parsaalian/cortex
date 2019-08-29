@@ -26,8 +26,4 @@ describe('cursor', () => {
   });
 });
 
-describe('style', () => {
-  it('should check types', () => {
-    expect(changeStyle('test')).toThrow();
-  });
-});
+describe('style', () => {});
