@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import produce from 'immer';
 import { createReducer } from 'redux-act';
 import initialState from '../store/initialState';
 import { moveCursor, changeStyle, typeChar, removeChar } from '../actions/editor';
@@ -34,6 +35,11 @@ export const typingReducer = createReducer(
   {
     [typeChar]: (state, payload) => {
       const { char } = payload;
+      if (typeof char === 'string') {
+        return produce(state, (draft) => {
+          draft.document.pages[0].lineGroups[0].wordGroups[0].characters.push({ content: char });
+        });
+      }
       return state;
     },
 

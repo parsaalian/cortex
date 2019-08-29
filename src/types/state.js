@@ -13,7 +13,7 @@ export type StateType = {
               +type: string,
               +characters: Array<{
                 +content: string,
-                +style: string,
+                +style?: ?string,
               }>,
             }>
           | Array<{
