@@ -1,6 +1,5 @@
 /* eslint-disable */
 // @flow
-import produce from 'immer';
 import initialState from '../../store/initialState';
 import { cursorReducer, typingReducer } from '../editor';
 import { moveCursor, typeChar, removeChar } from '../../actions/editor';
@@ -30,13 +29,9 @@ describe('typing', () => {
 
   it('should append character in the first place if document is empty', () => {
     const content = 'a';
-    const nextState = produce(initialState, (draftState) => {
-      draftState.document.pages[0].lineGroups[0].wordGroups[0].characters.push({ content });
-      draftState.document.cursor[3] += 1;
-    });
     const newState = typingReducer(initialState, typeChar(content));
-    expect(newState.document.pages[0].lineGroups[0].wordGroups[0].character).toEqual(
-      nextState.document.pages[0].lineGroups[0].wordGroups[0].character,
+    expect(newState.document.pages[0].lineGroups[0].wordGroups[0].character.content).toEqual(
+      content,
     );
   });
 
@@ -44,5 +39,11 @@ describe('typing', () => {
     const content = 'a';
     const nextState = typingReducer(initialState, typeChar(content));
     expect(nextState.document.cursor).toEqual([0, 0, 0, 1]);
+  });
+
+  it('should change word size when typing', () => {
+    const content = 'a';
+    const nextState = typingReducer(initialState, typeChar(content));
+    expect();
   });
 });
