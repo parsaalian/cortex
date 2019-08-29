@@ -32,8 +32,12 @@ describe('typing', () => {
     const content = 'a';
     const nextState = produce(initialState, (draftState) => {
       draftState.document.pages[0].lineGroups[0].wordGroups[0].characters.push({ content });
+      draftState.document.cursor[3] += 1;
     });
-    expect(typingReducer(initialState, typeChar(content))).toEqual(nextState);
+    const newState = typingReducer(initialState, typeChar(content));
+    expect(newState.document.pages[0].lineGroups[0].wordGroups[0].character).toEqual(
+      nextState.document.pages[0].lineGroups[0].wordGroups[0].character,
+    );
   });
 
   it('should move cursor one place if document is empty', () => {

@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: off */
 import _ from 'lodash';
 import produce from 'immer';
 import { createReducer } from 'redux-act';
@@ -38,14 +39,13 @@ export const typingReducer = createReducer(
       if (typeof char === 'string') {
         return produce(state, (draft) => {
           draft.document.pages[0].lineGroups[0].wordGroups[0].characters.push({ content: char });
+          draft.document.cursor[3] += 1;
         });
       }
       return state;
     },
 
-    [removeChar]: (state) => {
-      return state;
-    },
+    [removeChar]: (state) => state,
   },
   initialState,
 );
