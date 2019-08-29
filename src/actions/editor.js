@@ -4,7 +4,7 @@ import type { StyleType, MoveCursorType, ChangeStyleType, TypeCharType } from '.
 
 // cursor actions
 export const moveCursor = createAction<Array<string>, MoveCursorType, null>(
-  'Move cursor towards given direction (left, right,up, down)',
+  'Move cursor towards given direction (left, right, up, down)',
   (
     direction: string,
   ): {
