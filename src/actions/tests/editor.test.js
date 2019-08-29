@@ -3,23 +3,29 @@
 import { moveCursor, changeStyle } from '../editor';
 
 describe('cursor', () => {
-  test('return left action', () => {
+  it('should return left action', () => {
     const action = moveCursor('l');
     expect(action.payload).toEqual({ direction: 'l' });
   });
 
-  test('return right action', () => {
+  it('should return right action', () => {
     const action = moveCursor('r');
     expect(action.payload).toEqual({ direction: 'r' });
   });
 
-  test('return up action', () => {
+  it('should return up action', () => {
     const action = moveCursor('u');
     expect(action.payload).toEqual({ direction: 'u' });
   });
 
-  test('return down action', () => {
+  it('should return down action', () => {
     const action = moveCursor('d');
     expect(action.payload).toEqual({ direction: 'd' });
+  });
+});
+
+describe('style', () => {
+  it('should check types', () => {
+    expect(changeStyle('test')).toThrow();
   });
 });

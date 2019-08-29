@@ -1,7 +1,7 @@
 // @flow
 import React, { type Node } from 'react';
 
-import Editor from './editor';
+import Editor from './views/editor';
 
 export default function App(): Node {
   return (
