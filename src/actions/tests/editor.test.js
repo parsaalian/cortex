@@ -2,6 +2,8 @@
 // @flow
 import { moveCursor, changeStyle } from '../editor';
 
+// TODO: complete tests for actions
+
 describe('cursor', () => {
   it('should return left action', () => {
     const action = moveCursor('l');
