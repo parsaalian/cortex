@@ -1,5 +1,6 @@
 /* eslint-disable */
 // @flow
+import size from '~/src/packages/damastes';
 import initialState from '../../store/initialState';
 import { cursorReducer, typingReducer } from '../editor';
 import { moveCursor, typeChar, removeChar } from '../../actions/editor';
@@ -30,7 +31,7 @@ describe('typing', () => {
   it('should append character in the first place if document is empty', () => {
     const content = 'a';
     const newState = typingReducer(initialState, typeChar(content));
-    expect(newState.document.pages[0].lineGroups[0].wordGroups[0].character.content).toEqual(
+    expect(newState.document.pages[0].lineGroups[0].wordGroups[0].characters[0].content).toEqual(
       content,
     );
   });
@@ -44,6 +45,7 @@ describe('typing', () => {
   it('should change word size when typing', () => {
     const content = 'a';
     const nextState = typingReducer(initialState, typeChar(content));
+    console.log(size(content));
     expect();
   });
 });

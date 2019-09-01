@@ -1,15 +1,15 @@
 /* eslint {react/prop-types: off, react/no-array-index-key: off} */
 import React, { Component } from 'react';
 
-import Data from 'utils/data';
-import Middleware from 'utils/middlewares';
+// import Data from 'utils/data';
+// import Middleware from '~/packages/cadmus';
 
 import Page from './page';
 
 export default class Document extends Component {
   constructor(props) {
     super(props);
-    this.state = { text: Data.get() };
+    this.state = { text: [[[['']]]] /* Data.get() */ };
     this.handleType = this.handleType.bind(this);
   }
 
@@ -23,10 +23,10 @@ export default class Document extends Component {
 
   handleType(e) {
     e.preventDefault();
-    Middleware.input(e);
-    this.setState({
+    // Middleware.input(e);
+    /* this.setState({
       text: Data.get(),
-    });
+    }); */
   }
 
   render() {
