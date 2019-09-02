@@ -1,7 +1,8 @@
 {
-  "presets": ["@babel/preset-env"],
-  "plugins": [
-    "transform-flow-strip-types",
-    "babel-plugin-root-import"
-  ]
+    "presets": [
+        "next/babel"
+    ],
+    "plugins": [
+        "transform-flow-strip-types"
+    ]
 }
