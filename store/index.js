@@ -1,5 +1,7 @@
+// import _ from 'lodash';
 import { createStore, applyMiddleware } from 'redux';
 import editorReducers from './reducers/editor';
+// import { loadState, saveState } from '~/packages/nemosyne';
 
 const logger = (store) => (next) => (action) => {
   console.log('dispatching', action);
@@ -8,6 +10,16 @@ const logger = (store) => (next) => (action) => {
   return result;
 };
 
-const store = createStore(editorReducers, applyMiddleware(logger));
+// const persistedState = loadState();
+
+const store = createStore(editorReducers, /* , persistedState, */ applyMiddleware(logger));
+
+/* store.subscribe(
+  _.throttle(() => {
+    saveState({
+      ...store.getState(),
+    });
+  }, 1000),
+); */
 
 export default store;
