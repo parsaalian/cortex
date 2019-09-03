@@ -1,5 +1,5 @@
 // @flow
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 type SizeType = {
   size: {
@@ -8,7 +8,21 @@ type SizeType = {
   },
 };
 
-const Page = styled.div`
+const flicker = keyframes`
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+`;
+
+export const StyledPage = styled.div`
   background-color: white;
   box-shadow: rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   width: ${(props: SizeType): number => props.size.width};
@@ -19,4 +33,11 @@ const Page = styled.div`
   text-align: justify;
 `;
 
-export default Page;
+export const StyledLine = styled.div`
+  width: 100%;
+`;
+
+export const StyledCursor = styled.span`
+  border: 1px solid black;
+  animation: ${flicker} 1s infinite;
+`;

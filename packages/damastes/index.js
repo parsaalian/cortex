@@ -1,11 +1,8 @@
 import _ from 'lodash';
 
 function createElement(text, style) {
-  console.log(document);
-  const doc = document.implementation.createHTMLDocument('Sizing document');
-  console.log(doc);
-  const element = doc.createElement('div');
-  const textNode = doc.createTextNode(text);
+  const element = document.createElement('div');
+  const textNode = document.createTextNode(text);
   element.appendChild(textNode);
   _.forEach(style, (value, key) => {
     element.style[key] = value;
@@ -15,8 +12,7 @@ function createElement(text, style) {
   element.style.left = '-999px';
   element.style.top = '-999px';
   element.style.height = 'auto';
-  doc.body.appendChild(element);
-  console.log(element.offsetWidth);
+  document.body.appendChild(element);
   return element;
 }
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 // import Middleware from '~/packages/cadmus';
 
-import Page from '../page';
+import Page from './page';
 import sizing from '~/packages/damastes';
 
 import withTyping from '~/web/views/editor/hoc/withTyping';
