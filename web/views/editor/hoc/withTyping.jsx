@@ -1,13 +1,15 @@
 /* eslint react/jsx-props-no-spreading: off */
 import React, { Component } from 'react';
 
-const withTyping = (WrappedComponent, handleType) =>
+const withTyping = (WrappedComponent) =>
   class extends Component {
     componentDidMount() {
+      const { handleType } = this.props;
       document.addEventListener('keydown', handleType);
     }
 
     componentWillUnmount() {
+      const { handleType } = this.props;
       document.removeEventListener('keydown', handleType);
     }
 

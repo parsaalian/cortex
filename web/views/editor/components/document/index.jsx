@@ -1,20 +1,8 @@
 /* eslint {react/prop-types: off} */
 import _ from 'lodash';
 import React from 'react';
-
-// import Middleware from '~/packages/cadmus';
-
 import Page from './page';
-
 import withTyping from '~/web/views/editor/hoc/withTyping';
-
-function handleType(e) {
-  e.preventDefault();
-  // Middleware.input(e);
-  /* this.setState({
-    text: Data.get(),
-  }); */
-}
 
 function Document({ text }) {
   return (
@@ -33,4 +21,4 @@ function Document({ text }) {
   );
 }
 
-export default withTyping(Document, handleType);
+export default withTyping(Document);

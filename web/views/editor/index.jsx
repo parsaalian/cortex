@@ -3,7 +3,7 @@ import React from 'react';
 import type { Node } from 'react';
 import { Provider } from 'react-redux';
 
-import Document from './components/document';
+import Document from './containers/document';
 // import StylePicker from './containers/stylePicker';
 
 import startup from './utils/startup';
@@ -15,7 +15,7 @@ export default function EditorProvider(): Node {
 
   return (
     <Provider store={store}>
-      <Document text={[[[['a']]]]} />
+      <Document />
       {/* <StylePicker /> */}
     </Provider>
   );

@@ -37,12 +37,13 @@ export const typingReducer = createReducer(
   {
     [typeChar]: (state, payload) => {
       const { char } = payload;
-      if (typeof char === 'string') {
+      /* if (typeof char === 'string') {
         return produce(state, (draft) => {
           draft.document.pages[0].lineGroups[0].wordGroups[0].characters.push({ content: char });
           draft.document.cursor[3] += 1;
         });
-      }
+      } */
+      console.log(1);
       return state;
     },
 
