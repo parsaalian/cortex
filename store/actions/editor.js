@@ -1,37 +1,18 @@
 // @flow
-import { createAction } from 'redux-act';
-import type { StyleType, MoveCursorType, ChangeStyleType, TypeCharType } from '../types/editor';
+import { createAction } from 'redux-actions';
+import {
+  MOVE_CURSOR,
+  CHANGE_STYLE,
+  TYPE_CHAR,
+  REMOVE_CHAR,
+} from '~/store/constants/actions/editor';
 
-// cursor actions
-export const moveCursor = createAction<Array<string>, MoveCursorType, null>(
-  'Move cursor towards given direction (left, right, up, down)',
-  (
-    direction: string,
-  ): {
-    direction: string,
-  } => ({ direction }),
-);
+// cursor action creators
+export const moveCursor = createAction(MOVE_CURSOR);
 
-// styling actions
-export const changeStyle = createAction<Array<StyleType>, ChangeStyleType, null>(
-  'Change the style on select in panel',
-  (
-    style: StyleType,
-  ): {
-    style: StyleType,
-  } => ({ style }),
-);
+// styling action creators
+export const changeStyle = createAction(CHANGE_STYLE);
 
-// typing actions
-export const typeChar = createAction<Array<string>, TypeCharType, null>(
-  'Type a character in cursor location',
-  (
-    char: string,
-  ): {
-    char: string,
-  } => ({ char }),
-);
-
-export const removeChar = createAction<null, null, null>(
-  'Removes a character from cursor location',
-);
+// typing action creators
+export const typeChar = createAction(TYPE_CHAR);
+export const removeChar = createAction(REMOVE_CHAR);
