@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import Document from './containers/document';
 // import StylePicker from './containers/stylePicker';
 
-import startup from './utils/startup';
+// import startup from './utils/startup';
 import store from '~/store';
 
 export default function EditorProvider(): Node {
   // start up
-  startup();
+  // startup();
 
   return (
     <Provider store={store}>

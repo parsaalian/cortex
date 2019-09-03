@@ -2,58 +2,43 @@
 import _ from 'lodash';
 import produce from 'immer';
 import { combineReducers } from 'redux';
-import { createReducer } from 'redux-act';
+import { handleAction } from 'redux-actions';
 import initialState from '../initialState';
-import { moveCursor, changeStyle, typeChar, removeChar } from '../actions/editor';
-import { LEFT, RIGHT, UP, DOWN } from '../constants/editor';
-
-// cursor reducers
-export const cursorReducer = createReducer(
-  {
-    [moveCursor]: (state, payload) => {
-      const { direction } = payload;
-      if (!_.includes([LEFT, RIGHT, UP, DOWN], direction)) {
-        return state;
-      }
-      return state;
-    },
-  },
-  initialState,
-);
-
-// style reducers
-export const styleReducer = createReducer(
-  {
-    [changeStyle]: (state, payload) => {
-      const { style } = payload;
-      return state;
-    },
-  },
-  initialState,
-);
+import { TYPE_CHAR, REMOVE_CHAR } from '../constants/actions/editor';
+import sizing from '~/packages/damastes';
 
 // typing reducers
-export const typingReducer = createReducer(
-  {
-    [typeChar]: (state, payload) => {
-      const { char } = payload;
-      /* if (typeof char === 'string') {
-        return produce(state, (draft) => {
-          draft.document.pages[0].lineGroups[0].wordGroups[0].characters.push({ content: char });
-          draft.document.cursor[3] += 1;
-        });
-      } */
-      console.log(1);
-      return state;
-    },
-
-    [removeChar]: (state) => state,
-  },
-  initialState,
+const typeCharReducer = handleAction(
+  TYPE_CHAR,
+  (state, action) =>
+    produce(state, (draft) => {
+      const content = action.payload.char.key;
+      const size = sizing(content);
+      draft.pages[0].lineGroups[0].wordGroups[0].characters.push({ content });
+      return draft;
+    }),
+  initialState.document,
 );
 
+const removeCharReducer = handleAction(REMOVE_CHAR, (state, action) => {}, initialState.document);
+
+function typingReducer(state = initialState.document, action) {
+  switch (action.type) {
+    case TYPE_CHAR:
+      return typeCharReducer(state, action);
+    case REMOVE_CHAR:
+      return removeCharReducer(state, action);
+    default:
+      return state;
+  }
+}
+
+// styling reducer
+function stylingReducer(state = initialState.format, action) {
+  return state;
+}
+
 export default combineReducers({
-  cursorReducer,
-  styleReducer,
-  typingReducer,
+  document: typingReducer,
+  format: stylingReducer,
 });

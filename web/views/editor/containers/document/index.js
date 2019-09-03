@@ -5,15 +5,18 @@ import Document from '~/web/views/editor/components/document';
 
 const getDocumentText = (state) => {
   const { document } = state;
-  console.log(document);
+  return _.map(document.pages, (page) =>
+    _.map(page.lineGroups, (lineGroup) =>
+      _.map(lineGroup.wordGroups, (wordGroup) =>
+        _.map(wordGroup.characters, (character) => character.content),
+      ),
+    ),
+  );
 };
 
-const mapStateToProps = (state) => {
-  getDocumentText(state);
-  return {
-    text: [[[['ab']]]],
-  };
-};
+const mapStateToProps = (state) => ({
+  text: getDocumentText(state),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   handleType: (e) => {
