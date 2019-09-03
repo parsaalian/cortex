@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 // import Data from 'utils/data';
 // import Middleware from '~/packages/cadmus';
 
+import sizing from '~/packages/damastes';
+
 import Page from './page';
 
 export default class Document extends Component {
@@ -23,6 +25,7 @@ export default class Document extends Component {
 
   handleType(e) {
     e.preventDefault();
+    console.log(sizing(e.key));
     // Middleware.input(e);
     /* this.setState({
       text: Data.get(),

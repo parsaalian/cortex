@@ -5,7 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "./node_modules/.bin/jest",
+    "test:watch": "yarn run test -- --watch",
+    "lint": "./node_modules/.bin/eslint . --fix;exit 0",
+    "prettier": "./node_modules/.bin/prettier --config .prettierrc \"src/**/*.{js,jsx}\" --write",
+    "flow": "./node_modules/.bin/flow"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.22",
@@ -17,9 +22,11 @@
     "classnames": "^2.2.6",
     "commander": "^3.0.1",
     "immer": "^3.2.0",
+    "jest": "^24.9.0",
     "lodash": "^4.17.15",
     "next": "9.0.5",
     "node-sass": "^4.12.0",
+    "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "react": "16.9.0",
     "react-dom": "16.9.0",

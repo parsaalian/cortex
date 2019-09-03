@@ -1,10 +1,10 @@
 /* eslint-disable */
 // @flow
-import size from '~/src/packages/damastes';
-import initialState from '../../store/initialState';
+import size from '~/packages/damastes';
+import initialState from '~/store/initialState';
 import { cursorReducer, typingReducer } from '../editor';
-import { moveCursor, typeChar, removeChar } from '../../actions/editor';
-import { LEFT, RIGHT, UP, DOWN } from '../../constants/editor';
+import { moveCursor, typeChar, removeChar } from '~/store/actions/editor';
+import { LEFT, RIGHT, UP, DOWN } from '~/store/constants/editor';
 
 describe('cursor', () => {
   it('should contains action creators', () => {
