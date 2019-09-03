@@ -15,7 +15,7 @@ export default function EditorProvider(): Node {
 
   return (
     <Provider store={store}>
-      <Document />
+      <Document text={[[[['a']]]]} />
       {/* <StylePicker /> */}
     </Provider>
   );

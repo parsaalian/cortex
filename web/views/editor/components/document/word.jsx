@@ -1,11 +1,12 @@
-/* eslint {react/prop-types: off, react/no-array-index-key: off} */
+/* eslint {react/prop-types: off} */
+import _ from 'lodash';
 import React from 'react';
 import { StyledCursor } from './styled';
 
 export default function Word({ word }) {
   return (
     <>
-      {word.map((char, i) => {
+      {_.map(word, (char, i) => {
         if (char === 'cursor') {
           return <StyledCursor />;
         }

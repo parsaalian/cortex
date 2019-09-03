@@ -1,7 +1,6 @@
 // @flow
-
 // document constants
-export const Document = {
+export default {
   pageSizes: {
     letter: {
       width: '816px',
