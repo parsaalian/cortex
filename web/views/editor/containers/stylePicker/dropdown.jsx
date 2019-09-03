@@ -36,7 +36,7 @@ export default class Dropdown extends Component {
     const { children } = this.props;
     const { show } = this.state;
     return (
-      <React.Fragment>
+      <>
         <div
           className={styles.icon}
           ref={(node) => {
@@ -53,7 +53,7 @@ export default class Dropdown extends Component {
         >
           {children}
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }
