@@ -1,26 +1,16 @@
 /* eslint {react/prop-types: off, react/no-array-index-key: off} */
 import React from 'react';
-import withStyles from 'react-jss';
+import Cursor from './styled';
 
-function Line({ word, classes }) {
+export default function Word({ word }) {
   return (
     <>
       {word.map((char, i) => {
         if (char === 'cursor') {
-          return <span key={i} className={classes.cursor} />;
+          return <Cursor />;
         }
         return <React.Fragment key={i}>{char}</React.Fragment>;
       })}
     </>
   );
 }
-
-export default withStyles({
-  cursor: {
-    border: '1px solid black',
-    '-webkit-animation': 'flickerAnimation 1s infinite',
-    '-moz-animation': 'flickerAnimation 1s infinite',
-    '-o-animation': 'flickerAnimation 1s infinite',
-    animation: 'flickerAnimation 1s infinite',
-  },
-})(Line);

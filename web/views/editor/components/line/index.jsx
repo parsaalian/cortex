@@ -1,25 +1,17 @@
 /* eslint {react/prop-types: off, react/no-array-index-key: off} */
 import React from 'react';
-import withStyles from 'react-jss';
-
 import Word from '../word';
-import './cursor.css';
+import StyledLine from './styled';
 
-function Line({ line, classes }) {
+export default function Line({ line }) {
   return (
-    <div className={classes.line}>
+    <StyledLine>
       {line.map((word, i) => (
         <React.Fragment key={i}>
           <Word word={word} />
           &nbsp;
         </React.Fragment>
       ))}
-    </div>
+    </StyledLine>
   );
 }
-
-export default withStyles({
-  line: {
-    width: '100%',
-  },
-})(Line);
