@@ -1,5 +1,5 @@
 // @flow
-import { NORMAL } from '../constants';
+import { NORMAL } from './constants/editor';
 
 export default {
   format: {

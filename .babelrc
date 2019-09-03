@@ -3,6 +3,14 @@
         "next/babel"
     ],
     "plugins": [
-        "transform-flow-strip-types"
-    ]
+        "transform-flow-strip-types",
+        "babel-plugin-root-import"
+    ],
+    "env": { // For React Native
+        "production": {
+            "plugins": [
+                "babel-plugin-root-import"
+            ]
+        }
+    }
 }

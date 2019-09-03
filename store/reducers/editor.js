@@ -1,8 +1,9 @@
 /* eslint no-param-reassign: off */
 import _ from 'lodash';
 import produce from 'immer';
+import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
-import initialState from '../store/initialState';
+import initialState from '../initialState';
 import { moveCursor, changeStyle, typeChar, removeChar } from '../actions/editor';
 import { LEFT, RIGHT, UP, DOWN } from '../constants/editor';
 
@@ -49,3 +50,9 @@ export const typingReducer = createReducer(
   },
   initialState,
 );
+
+export default combineReducers({
+  cursorReducer,
+  styleReducer,
+  typingReducer,
+});

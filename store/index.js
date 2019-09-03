@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-import editorReducers from '../reducers/editor';
+import editorReducers from './reducers/editor';
 
 const logger = (store) => (next) => (action) => {
   console.log('dispatching', action);

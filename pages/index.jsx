@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import Editor from '../web/views/editor';
+import Editor from '~/web/views/editor';
 
 const Home = () => (
   <div>
