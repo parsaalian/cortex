@@ -12,9 +12,16 @@ const typeCharReducer = handleAction(
   TYPE_CHAR,
   (state, action) =>
     produce(state, (draft) => {
+      const { cursor } = draft;
       const content = action.payload.char.key;
       const size = sizing(content);
-      draft.pages[0].lineGroups[0].wordGroups[0].characters.push({ content });
+      draft.pages[cursor[0]].lineGroups[cursor[1]].wordGroups[cursor[2]].characters.splice(
+        cursor[3],
+        0,
+        {
+          content,
+        },
+      );
       return draft;
     }),
   initialState.document,
