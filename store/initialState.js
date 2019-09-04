@@ -24,23 +24,19 @@ export default {
           {
             type: NORMAL,
             level: 0,
+            spaces: 0,
             wordGroups: [
               {
                 type: NORMAL,
-                characters: [],
+                characters: '',
+                size: [0, 0],
               },
             ],
-            size: {
-              width: 0,
-              height: 0,
-            },
+            size: [0, 0],
           },
         ],
         footnotes: [],
-        size: {
-          width: 0,
-          height: 0,
-        },
+        size: [0, 0],
       },
     ],
     headings: [],

@@ -9,28 +9,22 @@ export type StateType = {
       +lineGroups: Array<{
         +type: string,
         +level: number,
-        +wordGroups: | Array<{
+        +spaces: number,
+        +wordGroups:
+          | Array<{
               +type: string,
-              +characters: Array<{
-                +content: string,
-                +style?: ?string,
-              }>,
+              +characters: string,
+              +style?: ?string,
             }>
           | Array<{
               +type: string,
               +pointer: number,
               +lines: Array<number>,
             }>,
-        +size: {
-          +width: number,
-          +height: number,
-        },
+        +size: Array<number>,
       }>,
       +footnotes: Array<number>,
-      +size: {
-        +width: number,
-        +height: number,
-      },
+      +size: Array<number>,
     }>,
     +headings: Array<{
       +type: string,
@@ -42,10 +36,7 @@ export type StateType = {
           +style: string,
         }>,
       }>,
-      +size: {
-        +width: number,
-        +height: number,
-      },
+      +size: Array<number>,
     }>,
     +footnotes: Array<{
       +wordGroups: Array<{
@@ -55,10 +46,7 @@ export type StateType = {
           +style: string,
         }>,
       }>,
-      +size: {
-        +width: number,
-        +height: number,
-      },
+      +size: Array<number>,
     }>,
     +images: Array<string>,
     +tables: Array<{
