@@ -8,7 +8,7 @@ const getDocumentText = (state) => {
   return _.map(document.pages, (page) =>
     _.map(page.lineGroups, (lineGroup) =>
       _.map(lineGroup.wordGroups, (wordGroup) =>
-        _.map(wordGroup.characters, (character) => character.content),
+        _.map(wordGroup.characters, (character) => character),
       ),
     ),
   );

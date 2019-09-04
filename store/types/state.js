@@ -14,7 +14,10 @@ export type StateType = {
           | Array<{
               +type: string,
               +characters: string,
-              +style?: ?string,
+              +style?: Array<{
+                +from: number,
+                +style: string,
+              }>,
             }>
           | Array<{
               +type: string,
