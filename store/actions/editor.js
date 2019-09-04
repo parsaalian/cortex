@@ -1,6 +1,6 @@
 // @flow
 import { createAction } from 'redux-actions';
-import { MOVE_CURSOR, CHANGE_STYLE, TYPE_CHAR, REMOVE_CHAR } from '../constants/actions/editor';
+import { MOVE_CURSOR, CHANGE_STYLE, TYPE_CHAR } from '../constants/actions/editor';
 
 // cursor action creators
 export const moveCursor = createAction(MOVE_CURSOR);
@@ -9,5 +9,5 @@ export const moveCursor = createAction(MOVE_CURSOR);
 export const changeStyle = createAction(CHANGE_STYLE);
 
 // typing action creators
-export const typeChar = createAction(TYPE_CHAR, (char: string): { char: string } => ({ char }));
-export const removeChar = createAction(REMOVE_CHAR);
+// TODO: change event type to keyboard event
+export const typeChar = createAction(TYPE_CHAR, (event: string): { event: string } => ({ event }));
