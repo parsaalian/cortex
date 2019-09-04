@@ -1,11 +1,10 @@
 /* eslint no-param-reassign: off */
 import _ from 'lodash';
 import produce from 'immer';
-import { combineReducers } from 'redux';
 import { handleAction } from 'redux-actions';
-import initialState from '../initialState';
-import { TYPE_CHAR, REMOVE_CHAR } from '../constants/actions/editor';
-import insertChar from './utils';
+import insertChar from '../utils';
+import initialState from '~/store/initialState';
+import { TYPE_CHAR, REMOVE_CHAR } from '~/store/constants/actions/editor';
 import sizing from '~/packages/damastes';
 
 const maxSize = 559;
@@ -43,7 +42,7 @@ const typeCharReducer = handleAction(
 
 const removeCharReducer = handleAction(REMOVE_CHAR, (state, action) => {}, initialState.document);
 
-function typingReducer(state = initialState.document, action) {
+export default function typingReducer(state = initialState.document, action) {
   switch (action.type) {
     case TYPE_CHAR:
       return typeCharReducer(state, action);
@@ -53,13 +52,3 @@ function typingReducer(state = initialState.document, action) {
       return state;
   }
 }
-
-// styling reducer
-function stylingReducer(state = initialState.format, action) {
-  return state;
-}
-
-export default combineReducers({
-  document: typingReducer,
-  format: stylingReducer,
-});
