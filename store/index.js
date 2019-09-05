@@ -4,9 +4,9 @@ import editorReducers from './reducers/editor';
 // import { loadState, saveState } from '~/packages/nemosyne';
 
 const logger = (store) => (next) => (action) => {
-  console.log('dispatching', action);
+  // console.log('dispatching', action);
   const result = next(action);
-  console.log('next state', store.getState());
+  // console.log('next state', store.getState());
   return result;
 };
 

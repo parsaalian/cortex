@@ -10,7 +10,7 @@ import typing from '~/packages/cadmus';
 import { INSERT_CHAR, INSERT_SPACE, INSERT_ENTER, REMOVE_CHAR } from '~/packages/cadmus/constants';
 
 const maxWidth = 559;
-const maxHeight = 18;
+const maxHeight = 36;
 
 // typing reducers
 const typeCharReducer = handleAction(
@@ -82,7 +82,7 @@ const typeCharReducer = handleAction(
 
           newWord.characters = content;
 
-          newPage.size = content.height;
+          newPage.size = contentSize.height;
           newLine.size = [contentSize.height, contentSize.width];
           newWord.size = [contentSize.height, contentSize.width];
 
