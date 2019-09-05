@@ -22,28 +22,20 @@ const typeCharReducer = handleAction(
       const word = line.wordGroups[cursor[2]];
       const content = action.payload;
 
-      if (content === ' ') {
-        line.wordGroups.push({
-          type: 'NORMAL',
-          characters: '',
-          size: [0, 0],
-        });
-      } else {
-        const inserted = insertChar(
-          draft.pages[cursor[0]].lineGroups[cursor[1]].wordGroups[cursor[2]].characters,
-          cursor[3],
-          content,
-        );
-        const size = sizing(inserted);
+      const inserted = insertChar(
+        draft.pages[cursor[0]].lineGroups[cursor[1]].wordGroups[cursor[2]].characters,
+        cursor[3],
+        content,
+      );
+      const size = sizing(inserted);
 
-        if (line.size[1] + (size.width - word.size[1]) <= maxSize) {
-          word.characters = inserted;
-          line.size[0] = _.max([line.size[0], size.height]);
-          line.size[1] += size.width - word.size[1];
-          word.size[0] = _.max([word.size[0], size.height]);
-          word.size[1] = size.width;
-          cursor[3] += 1;
-        }
+      if (line.size[1] + (size.width - word.size[1]) <= maxSize) {
+        word.characters = inserted;
+        line.size[0] = _.max([line.size[0], size.height]);
+        line.size[1] += size.width - word.size[1];
+        word.size[0] = _.max([word.size[0], size.height]);
+        word.size[1] = size.width;
+        cursor[3] += 1;
       }
 
       return draft;

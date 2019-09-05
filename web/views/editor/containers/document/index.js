@@ -20,6 +20,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleType: (e) => {
+    e.preventDefault();
     dispatch(keyboardEvent(e));
   },
 });
