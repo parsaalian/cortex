@@ -63,7 +63,21 @@ const typeCharReducer = handleAction(
           newWord.size = [contentSize.height, contentSize.width];
 
           cursor[3] = content.length;
-        }
+        } /* else {
+          word.characters = inserted;
+          word.size[0] = _.max([word.size[0], size.height]);
+          word.size[1] = size.width;
+          const savedWord = _.last(line.wordGroups);
+          line.wordGroups = _.dropRight(line.wordGroups);
+
+          const newLine = page.lineGroups[cursor[1]];
+          newLine.wordGroups[cursor[2]] = savedWord;
+
+          page.size += size.height;
+          newLine.size = [size.height, size.width];
+
+          cursor[3] = inserted.length;
+        } */
       } else if (
         !_.isUndefined(page.lineGroups[cursor[1] + 1]) &&
         page.size + contentSize.height <= maxHeight
@@ -99,7 +113,16 @@ const typeCharReducer = handleAction(
 
 const insertSpaceReducer = handleAction(
   INSERT_SPACE,
-  (state, action) => state,
+  (state, action) =>
+    produce(state, (draft) => {
+      const { cursor } = draft;
+      const initialWord = initialState.document.pages[0].lineGroups[0].wordGroups[0];
+      const line = draft.pages[cursor[0]].lineGroups[cursor[1]];
+      line.wordGroups.push(initialWord);
+      line.size[1] += 4;
+      cursor[2] += 1;
+      cursor[3] = 0;
+    }),
   initialState.document,
 );
 
