@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { typeChar } from '~/store/actions/editor';
+import { keyboardEvent } from '~/store/actions/editor';
 import Document from '~/web/views/editor/components/document';
 
 const getDocumentText = (state) => {
@@ -20,7 +20,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   handleType: (e) => {
-    dispatch(typeChar(e));
+    dispatch(keyboardEvent(e));
   },
 });
 

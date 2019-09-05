@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import typingReducer from './typing';
+import keyboardReducer from './keyboard';
 import stylingReducer from './styling';
 
 export default combineReducers({
-  document: typingReducer,
+  document: keyboardReducer,
   format: stylingReducer,
 });

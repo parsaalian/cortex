@@ -1,25 +1,26 @@
-/* eslint no-param-reassign: off */
+/* eslint {no-param-reassign: off, no-unused-vars: off} */
 import _ from 'lodash';
 import produce from 'immer';
 import { handleAction } from 'redux-actions';
 import insertChar from '../utils';
 import initialState from '~/store/initialState';
-import { TYPE_CHAR } from '~/store/constants/actions/editor';
+import { KEYBOARD_EVENT } from '~/store/constants/actions/editor';
 import sizing from '~/packages/damastes';
 import typing from '~/packages/cadmus';
+import { INSERT_CHAR, INSERT_SPACE, INSERT_ENTER, REMOVE_CHAR } from '~/packages/cadmus/constants';
 
 const maxSize = 559;
 
 // typing reducers
 const typeCharReducer = handleAction(
-  TYPE_CHAR,
+  INSERT_CHAR,
   (state, action) =>
     produce(state, (draft) => {
       const { cursor } = draft;
       const page = draft.pages[cursor[0]];
       const line = page.lineGroups[cursor[1]];
       const word = line.wordGroups[cursor[2]];
-      const content = action.payload.event.key;
+      const content = action.payload;
 
       if (content === ' ') {
         line.wordGroups.push({
@@ -50,19 +51,43 @@ const typeCharReducer = handleAction(
   initialState.document,
 );
 
-/* const removeCharReducer = handleAction(REMOVE_CHAR, (state, action) => {},
-initialState.document); */
+const insertSpaceReducer = handleAction(
+  INSERT_SPACE,
+  (state, action) => state,
+  initialState.document,
+);
 
-export default function typingReducer(state = initialState.document, action) {
+const insertEnterReducer = handleAction(
+  INSERT_ENTER,
+  (state, action) => state,
+  initialState.document,
+);
+
+const removeCharReducer = handleAction(
+  REMOVE_CHAR,
+  (state, action) => state,
+  initialState.document,
+);
+
+export default function keyboardReducer(state = initialState.document, action) {
   let typingAction;
-  if (action.type === TYPE_CHAR) {
-    typingAction = typing(action.payload.event);
+  if (action.type === KEYBOARD_EVENT) {
+    typingAction = typing(action.payload);
   }
   switch (action.type) {
-    case TYPE_CHAR:
-      console.log(typingAction);
-      console.log(action);
-      return typeCharReducer(state, action);
+    case KEYBOARD_EVENT:
+      switch (typingAction.type) {
+        case INSERT_CHAR:
+          return typeCharReducer(state, typingAction);
+        case INSERT_SPACE:
+          return insertSpaceReducer(state, typingAction);
+        case INSERT_ENTER:
+          return insertEnterReducer(state, typingAction);
+        case REMOVE_CHAR:
+          return removeCharReducer(state, typingAction);
+        default:
+          return state;
+      }
     default:
       return state;
   }

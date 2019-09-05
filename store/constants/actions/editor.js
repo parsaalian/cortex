@@ -6,4 +6,4 @@ export const MOVE_CURSOR = 'EDITOR/MOVE_CURSOR';
 export const CHANGE_STYLE = 'EDITOR/CHANGE_STYLE';
 
 // typing actions
-export const TYPE_CHAR = 'EDITOR/TYPE_CHAR';
+export const KEYBOARD_EVENT = 'EDITOR/KEYBOARD_EVENT';
