@@ -36,7 +36,29 @@ const typeCharReducer = handleAction(
         word.size[0] = _.max([word.size[0], size.height]);
         word.size[1] = size.width;
         cursor[3] += 1;
+      } else if (_.isUndefined(page.lineGroups[cursor[1] + 1])) {
+        const initialLine = initialState.document.pages[0].lineGroups[0];
+        page.lineGroups.push(initialLine);
+        cursor[1] += 1;
+        cursor[2] = 0;
+        if (size.width > maxSize) {
+          const newLine = page.lineGroups[cursor[1]];
+          const newWord = newLine.wordGroups[cursor[2]];
+          newWord.characters = content;
+          cursor[3] = content.length;
+        }
       }
+
+      /* else if (_.isUndefined(page.lineGroups[cursor[1] + 1])) {
+        word.characters = inserted;
+        const savedWord = _.last(line.wordGroups);
+        line.wordGroups = _.dropRight(line.wordGroups);
+        const initialLine = initialState.document.pages[0].lineGroups[0];
+        page.lineGroups.push(initialLine);
+        cursor[1] += 1;
+        cursor[2] = 0;
+        cursor[3] = inserted.length;
+      } */
 
       return draft;
     }),
