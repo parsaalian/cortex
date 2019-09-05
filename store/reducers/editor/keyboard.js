@@ -33,6 +33,7 @@ const typeCharReducer = handleAction(
       const size = sizing(inserted);
 
       if (line.size[1] + (size.width - word.size[1]) <= maxWidth) {
+        console.log(1);
         word.characters = inserted;
 
         page.size = line.size[0] > size.height ? page.size : page.size - line.size[0] + size.height;
@@ -48,10 +49,12 @@ const typeCharReducer = handleAction(
         _.isUndefined(page.lineGroups[cursor[1] + 1]) &&
         page.size + contentSize.height <= maxHeight
       ) {
-        const initialLine = initialState.document.pages[0].lineGroups[0];
+        console.log(2);
+        const initialLine = _.assign({}, initialState.document.pages[0].lineGroups[0]);
         page.lineGroups.push(initialLine);
         cursor[1] += 1;
         cursor[2] = 0;
+        console.log(size.width);
         if (size.width > maxWidth) {
           const newLine = page.lineGroups[cursor[1]];
           const newWord = newLine.wordGroups[cursor[2]];
@@ -63,28 +66,26 @@ const typeCharReducer = handleAction(
           newWord.size = [contentSize.height, contentSize.width];
 
           cursor[3] = content.length;
-        } /* else {
-          word.characters = inserted;
-          word.size[0] = _.max([word.size[0], size.height]);
-          word.size[1] = size.width;
-          const savedWord = _.last(line.wordGroups);
+        } else {
+          const newLine = page.lineGroups[cursor[1]];
+
           line.wordGroups = _.dropRight(line.wordGroups);
 
-          const newLine = page.lineGroups[cursor[1]];
-          newLine.wordGroups[cursor[2]] = savedWord;
+          newLine.wordGroups[cursor[2]].characters = inserted;
+          newLine.wordGroups[cursor[2]].size = [size.height, size.width];
 
           page.size += size.height;
           newLine.size = [size.height, size.width];
 
           cursor[3] = inserted.length;
-        } */
+        }
       } else if (
         !_.isUndefined(page.lineGroups[cursor[1] + 1]) &&
         page.size + contentSize.height <= maxHeight
       ) {
         // pass
       } else if (_.isUndefined(draft.pages[cursor[0] + 1])) {
-        const initialPage = initialState.document.pages[0];
+        const initialPage = _.assign({}, initialState.document.pages[0]);
         draft.pages.push(initialPage);
         cursor[0] += 1;
         cursor[1] = 0;
@@ -103,6 +104,7 @@ const typeCharReducer = handleAction(
           cursor[3] = content.length;
         }
       } else {
+        console.log(5);
         // pass
       }
 
@@ -116,7 +118,7 @@ const insertSpaceReducer = handleAction(
   (state, action) =>
     produce(state, (draft) => {
       const { cursor } = draft;
-      const initialWord = initialState.document.pages[0].lineGroups[0].wordGroups[0];
+      const initialWord = _.assign({}, initialState.document.pages[0].lineGroups[0].wordGroups[0]);
       const line = draft.pages[cursor[0]].lineGroups[cursor[1]];
       line.wordGroups.push(initialWord);
       line.size[1] += 4;
