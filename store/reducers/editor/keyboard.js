@@ -9,7 +9,8 @@ import sizing from '~/packages/damastes';
 import typing from '~/packages/cadmus';
 import { INSERT_CHAR, INSERT_SPACE, INSERT_ENTER, REMOVE_CHAR } from '~/packages/cadmus/constants';
 
-const maxSize = 559;
+const maxWidth = 559;
+const maxHeight = 18;
 
 // typing reducers
 const typeCharReducer = handleAction(
@@ -20,7 +21,9 @@ const typeCharReducer = handleAction(
       const page = draft.pages[cursor[0]];
       const line = page.lineGroups[cursor[1]];
       const word = line.wordGroups[cursor[2]];
+
       const content = action.payload;
+      const contentSize = sizing(content);
 
       const inserted = insertChar(
         draft.pages[cursor[0]].lineGroups[cursor[1]].wordGroups[cursor[2]].characters,
@@ -29,36 +32,65 @@ const typeCharReducer = handleAction(
       );
       const size = sizing(inserted);
 
-      if (line.size[1] + (size.width - word.size[1]) <= maxSize) {
+      if (line.size[1] + (size.width - word.size[1]) <= maxWidth) {
         word.characters = inserted;
+
+        page.size = line.size[0] > size.height ? page.size : page.size - line.size[0] + size.height;
+
         line.size[0] = _.max([line.size[0], size.height]);
         line.size[1] += size.width - word.size[1];
+
         word.size[0] = _.max([word.size[0], size.height]);
         word.size[1] = size.width;
+
         cursor[3] += 1;
-      } else if (_.isUndefined(page.lineGroups[cursor[1] + 1])) {
+      } else if (
+        _.isUndefined(page.lineGroups[cursor[1] + 1]) &&
+        page.size + contentSize.height <= maxHeight
+      ) {
         const initialLine = initialState.document.pages[0].lineGroups[0];
         page.lineGroups.push(initialLine);
         cursor[1] += 1;
         cursor[2] = 0;
-        if (size.width > maxSize) {
+        if (size.width > maxWidth) {
           const newLine = page.lineGroups[cursor[1]];
           const newWord = newLine.wordGroups[cursor[2]];
+
           newWord.characters = content;
+
+          page.size += contentSize.height;
+          newLine.size = [contentSize.height, contentSize.width];
+          newWord.size = [contentSize.height, contentSize.width];
+
           cursor[3] = content.length;
         }
-      }
-
-      /* else if (_.isUndefined(page.lineGroups[cursor[1] + 1])) {
-        word.characters = inserted;
-        const savedWord = _.last(line.wordGroups);
-        line.wordGroups = _.dropRight(line.wordGroups);
-        const initialLine = initialState.document.pages[0].lineGroups[0];
-        page.lineGroups.push(initialLine);
-        cursor[1] += 1;
+      } else if (
+        !_.isUndefined(page.lineGroups[cursor[1] + 1]) &&
+        page.size + contentSize.height <= maxHeight
+      ) {
+        // pass
+      } else if (_.isUndefined(draft.pages[cursor[0] + 1])) {
+        const initialPage = initialState.document.pages[0];
+        draft.pages.push(initialPage);
+        cursor[0] += 1;
+        cursor[1] = 0;
         cursor[2] = 0;
-        cursor[3] = inserted.length;
-      } */
+        if (size.width > maxWidth) {
+          const newPage = draft.pages[cursor[0]];
+          const newLine = newPage.lineGroups[cursor[1]];
+          const newWord = newLine.wordGroups[cursor[2]];
+
+          newWord.characters = content;
+
+          newPage.size = content.height;
+          newLine.size = [contentSize.height, contentSize.width];
+          newWord.size = [contentSize.height, contentSize.width];
+
+          cursor[3] = content.length;
+        }
+      } else {
+        // pass
+      }
 
       return draft;
     }),

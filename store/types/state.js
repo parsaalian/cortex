@@ -27,7 +27,7 @@ export type StateType = {
         +size: Array<number>,
       }>,
       +footnotes: Array<number>,
-      +size: Array<number>,
+      +size: number,
     }>,
     +headings: Array<{
       +type: string,

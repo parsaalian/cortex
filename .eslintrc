@@ -7,6 +7,7 @@
     "extends": ["prettier", "airbnb", "plugin:flowtype/recommended"],
     "plugins": ["flowtype"],
     "rules": {
+        "operator-linebreak": "off",
         "class-methods-use-this": "off",
         "no-tabs": "off",
         "import/no-unresolved": "off",

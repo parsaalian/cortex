@@ -36,7 +36,7 @@ export default {
           },
         ],
         footnotes: [],
-        size: [0, 0],
+        size: 0,
       },
     ],
     headings: [],
