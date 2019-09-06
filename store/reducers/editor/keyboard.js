@@ -50,32 +50,32 @@ const typeCharReducer = handleAction(
         page.size + contentSize.height <= maxHeight
       ) {
         console.log(2);
-        const initialLine = _.assign({}, initialState.document.pages[0].lineGroups[0]);
+        const initialLine = { ...initialState.document.pages[0].lineGroups[0] };
+        const initialWord = { ...initialState.document.pages[0].lineGroups[0].wordGroups[0] };
         page.lineGroups.push(initialLine);
         cursor[1] += 1;
         cursor[2] = 0;
-        console.log(size.width);
-        if (size.width > maxWidth) {
-          const newLine = page.lineGroups[cursor[1]];
-          const newWord = newLine.wordGroups[cursor[2]];
 
-          newWord.characters = content;
+        const newLine = page.lineGroups[cursor[1]];
+
+        if (size.width > maxWidth) {
+          initialWord.characters = content;
 
           page.size += contentSize.height;
           newLine.size = [contentSize.height, contentSize.width];
-          newWord.size = [contentSize.height, contentSize.width];
+          initialWord.size = [contentSize.height, contentSize.width];
 
           cursor[3] = content.length;
         } else {
-          const newLine = page.lineGroups[cursor[1]];
-
           line.wordGroups = _.dropRight(line.wordGroups);
 
-          newLine.wordGroups[cursor[2]].characters = inserted;
-          newLine.wordGroups[cursor[2]].size = [size.height, size.width];
+          initialWord.characters = inserted;
+          initialWord.size = [size.height, size.width];
 
           page.size += size.height;
           newLine.size = [size.height, size.width];
+          newLine.wordGroups = [initialWord];
+          console.log(initialState.document.pages[0].lineGroups[0]);
 
           cursor[3] = inserted.length;
         }
