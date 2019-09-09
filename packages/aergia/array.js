@@ -12,7 +12,14 @@ export default class ArraySloth {
 
   getByIndex(index) {
     if (!_.isEmpty(this.changes)) {
-      // pass
+      this.array = _.reduce(
+        _.filter(this.changes, (change) => {
+          const { start, end } = change.range;
+          _.inRange(index, start, end);
+        }),
+        (array, callback) => callback(array),
+        this.array,
+      );
     }
     return this.array[index];
   }
