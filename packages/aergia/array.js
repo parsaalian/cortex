@@ -6,18 +6,18 @@ export default class ArraySloth {
     this.changes = [];
   }
 
-  set(range, callback) {
+  call(range, callback) {
     this.changes.push({ range, callback });
   }
 
   getByIndex(index) {
     if (!_.isEmpty(this.changes)) {
-      this.array = _.reduce(
+      this.array[index] = _.reduce(
         _.filter(this.changes, (change) => {
           const { start, end } = change.range;
-          _.inRange(index, start, end);
+          return _.inRange(index, start, end);
         }),
-        (array, callback) => callback(array),
+        (array, change) => change.callback(array[index]),
         this.array,
       );
     }
