@@ -47,6 +47,10 @@ export default class GapBuffer {
     ];
     if (_.inRange(position, 0, this.document.length + 1)) {
       this.grow(position);
+    } else if (position < 0) {
+      this.grow(0);
+    } else {
+      this.grow(this.document.length);
     }
   }
 
