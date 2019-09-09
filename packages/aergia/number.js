@@ -1,17 +1,23 @@
 import _ from 'lodash';
 
-class SlothNumber {
+export default class SlothNumber {
   constructor(number) {
     this.number = number;
     this.change = null;
   }
 
   set(callback) {
-    this.change = callback;
+    if (typeof callback === 'function') {
+      this.change = callback;
+    } else {
+      throw new Error('Input should be function');
+    }
   }
 
   get() {
-    this.number = this.change(this.number);
+    if (!_.isNull(this.change)) {
+      this.number = this.change(this.number);
+    }
     return this.number;
   }
 }
