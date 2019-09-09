@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 export default class SlothNumber {
-  constructor(number) {
-    this.number = number;
+  constructor(primitive) {
+    this.primitive = primitive;
     this.change = null;
   }
 
@@ -16,8 +16,8 @@ export default class SlothNumber {
 
   get() {
     if (!_.isNull(this.change)) {
-      this.number = this.change(this.number);
+      this.primitive = this.change(this.primitive);
     }
-    return this.number;
+    return this.primitive;
   }
 }
