@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default class SlothNumber {
+export default class PrimitiveSloth {
   constructor(primitive) {
     this.primitive = primitive;
     this.changes = [];
