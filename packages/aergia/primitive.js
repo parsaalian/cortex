@@ -3,20 +3,24 @@ import _ from 'lodash';
 export default class SlothNumber {
   constructor(primitive) {
     this.primitive = primitive;
-    this.change = null;
+    this.changes = [];
   }
 
-  set(callback) {
+  call(callback) {
     if (typeof callback === 'function') {
-      this.change = callback;
+      this.changes.push(callback);
     } else {
       throw new Error('Input should be function');
     }
   }
 
   get() {
-    if (!_.isNull(this.change)) {
-      this.primitive = this.change(this.primitive);
+    if (!_.isEmpty(this.changes)) {
+      this.primitive = _.reduce(
+        this.changes,
+        (primitive, callback) => callback(primitive),
+        this.primitive,
+      );
     }
     return this.primitive;
   }
