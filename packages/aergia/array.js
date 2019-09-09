@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+// TODO: implement get by condition (+ lodash features for array)
+
 export default class ArraySloth {
   constructor(array) {
     this.array = array;
@@ -22,11 +24,5 @@ export default class ArraySloth {
       );
     }
     return this.array[index];
-  }
-
-  getByCallback(callback) {
-    if (!_.isEmpty(this.changes)) {
-      // pass
-    }
   }
 }
