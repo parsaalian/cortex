@@ -17,7 +17,6 @@ export default class GapBuffer {
     this.gapLeft = 0;
     this.gapRight = size - 1;
     this.document = _.times(size, _.constant(GAP));
-    // this.document = _.times(size, _.constant(GAP));
   }
 
   grow(position) {
@@ -79,12 +78,16 @@ export default class GapBuffer {
         char,
         side: charSize,
         top: 0,
+        page: 0,
+        line: 0,
       };
     } else if (this.document[this.gapLeft - 1].side + charSize < maxWidth) {
       this.document[this.gapLeft] = {
         char,
         side: this.document[this.gapLeft - 1].side + charSize,
         top: this.document[this.gapLeft - 1].top,
+        page: this.document[this.gapLeft - 1].page,
+        line: this.document[this.gapLeft - 1].line,
       };
     } else if (
       this.document[this.gapLeft - 1].side + charSize >= maxWidth &&
@@ -94,12 +97,16 @@ export default class GapBuffer {
         char,
         side: charSize,
         top: this.document[this.gapLeft - 1].top + lineSize,
+        page: this.document[this.gapLeft - 1].page,
+        line: this.document[this.gapLeft - 1].line + 1,
       };
     } else {
       this.document[this.gapLeft] = {
         char,
         side: charSize,
         top: 0,
+        page: this.document[this.gapLeft - 1].page + 1,
+        line: 0,
       };
     }
     this.document = _.map(this.document, (size, index) => {
@@ -113,13 +120,16 @@ export default class GapBuffer {
           this.document[index].top + lineSize < maxHeight
         ) {
           this.document[index] = {
-            side: this.document[index].side - this.document[leftIndex].side - charSize,
+            side: mockSizing(this.document[index].char),
             top: this.document[index].top + lineSize,
+            line: this.document[leftIndex].line + 1,
           };
         } else {
           this.document[index] = {
             side: this.document[index].side - this.document[leftIndex].side - charSize,
             top: 0,
+            page: this.document[leftIndex].page + 1,
+            line: 0,
           };
         }
       }
