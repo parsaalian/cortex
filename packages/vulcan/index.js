@@ -3,7 +3,7 @@ import _ from 'lodash';
 const maxWidth = 20;
 const maxHeight = 20;
 const lineSize = 18;
-const VOID = 'VOID';
+const GAP = 'GAP';
 
 // eslint-disable-next-line no-unused-vars
 function mockSizing(char) {
@@ -15,21 +15,16 @@ export default class GapBuffer {
     this.size = size;
     this.gapSize = size;
     this.gapLeft = 0;
-    this.gapRight = 127;
-    this.document = _.times(size, _.constant(VOID));
-    this.sizeArray = _.times(size, _.constant(VOID));
+    this.gapRight = size - 1;
+    this.document = _.times(size, _.constant(GAP));
+    // this.document = _.times(size, _.constant(GAP));
   }
 
   grow(position) {
     this.document = [
       ..._.slice(this.document, 0, position),
-      ..._.times(this.size, _.constant(VOID)),
+      ..._.times(this.size, _.constant(GAP)),
       ..._.slice(this.document, position),
-    ];
-    this.sizeArray = [
-      ..._.slice(this.sizeArray, 0, position),
-      ..._.times(this.size, _.constant(VOID)),
-      ..._.slice(this.sizeArray, position),
     ];
     this.gapLeft = position;
     this.gapRight = position + this.size - 1;
@@ -41,9 +36,7 @@ export default class GapBuffer {
       this.gapLeft -= 1;
       this.gapRight -= 1;
       this.document[this.gapRight + 1] = this.document[this.gapLeft];
-      this.document[this.gapLeft] = VOID;
-      this.sizeArray[this.gapRight + 1] = this.sizeArray[this.gapLeft];
-      this.sizeArray[this.gapLeft] = VOID;
+      this.document[this.gapLeft] = GAP;
     }
   }
 
@@ -52,9 +45,7 @@ export default class GapBuffer {
       this.gapLeft += 1;
       this.gapRight += 1;
       this.document[this.gapLeft - 1] = this.document[this.gapRight];
-      this.document[this.gapRight] = VOID;
-      this.sizeArray[this.gapLeft - 1] = this.sizeArray[this.gapRight];
-      this.sizeArray[this.gapRight] = VOID;
+      this.document[this.gapRight] = GAP;
     }
   }
 
@@ -62,10 +53,6 @@ export default class GapBuffer {
     this.document = [
       ..._.slice(this.document, 0, this.gapLeft),
       ..._.slice(this.document, this.gapRight + 1),
-    ];
-    this.sizeArray = [
-      ..._.slice(this.sizeArray, 0, this.gapLeft),
-      ..._.slice(this.sizeArray, this.gapRight + 1),
     ];
     if (_.inRange(position, 0, this.document.length + 1)) {
       this.grow(position);
@@ -77,7 +64,6 @@ export default class GapBuffer {
   }
 
   insert(char) {
-    this.document[this.gapLeft] = char;
     this.adjust(char);
     this.gapLeft += 1;
     this.gapSize -= 1;
@@ -88,48 +74,51 @@ export default class GapBuffer {
 
   adjust(char) {
     const charSize = mockSizing(char);
-    console.log(...this.sizeArray, this.gapLeft);
     if (this.gapLeft === 0) {
-      this.sizeArray[this.gapLeft] = {
+      this.document[this.gapLeft] = {
+        char,
         side: charSize,
         top: 0,
       };
-    } else if (this.sizeArray[this.gapLeft - 1].side + charSize < maxWidth) {
-      this.sizeArray[this.gapLeft] = {
-        side: this.sizeArray[this.gapLeft - 1].side + charSize,
-        top: this.sizeArray[this.gapLeft - 1].top,
+    } else if (this.document[this.gapLeft - 1].side + charSize < maxWidth) {
+      this.document[this.gapLeft] = {
+        char,
+        side: this.document[this.gapLeft - 1].side + charSize,
+        top: this.document[this.gapLeft - 1].top,
       };
     } else if (
-      this.sizeArray[this.gapLeft - 1].side + charSize >= maxWidth &&
-      this.sizeArray[this.gapLeft - 1].top + lineSize < maxHeight
+      this.document[this.gapLeft - 1].side + charSize >= maxWidth &&
+      this.document[this.gapLeft - 1].top + lineSize < maxHeight
     ) {
-      this.sizeArray[this.gapLeft] = {
+      this.document[this.gapLeft] = {
+        char,
         side: charSize,
-        top: this.sizeArray[this.gapLeft - 1].top + lineSize,
+        top: this.document[this.gapLeft - 1].top + lineSize,
       };
     } else {
-      this.sizeArray[this.gapLeft] = {
+      this.document[this.gapLeft] = {
+        char,
         side: charSize,
         top: 0,
       };
     }
-    this.sizeArray = _.map(this.sizeArray, (size, index) => {
+    this.document = _.map(this.document, (size, index) => {
       if (index > this.gapRight) {
         const leftIndex = index === this.gapRight + 1 ? this.gapLeft : index - 1;
-        if (this.sizeArray[index].side + charSize < maxWidth) {
-          this.sizeArray[index].side += charSize;
-          this.sizeArray[index].top = this.sizeArray[leftIndex].top;
+        if (this.document[index].side + charSize < maxWidth) {
+          this.document[index].side += charSize;
+          this.document[index].top = this.document[leftIndex].top;
         } else if (
-          this.sizeArray[index].side + charSize >= maxWidth &&
-          this.sizeArray[index].top + lineSize < maxHeight
+          this.document[index].side + charSize >= maxWidth &&
+          this.document[index].top + lineSize < maxHeight
         ) {
-          this.sizeArray[index] = {
-            side: this.sizeArray[index].side - this.sizeArray[leftIndex].side - charSize,
-            top: this.sizeArray[index].top + lineSize,
+          this.document[index] = {
+            side: this.document[index].side - this.document[leftIndex].side - charSize,
+            top: this.document[index].top + lineSize,
           };
         } else {
-          this.sizeArray[index] = {
-            side: this.sizeArray[index].side - this.sizeArray[leftIndex].side - charSize,
+          this.document[index] = {
+            side: this.document[index].side - this.document[leftIndex].side - charSize,
             top: 0,
           };
         }

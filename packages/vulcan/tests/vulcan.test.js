@@ -17,6 +17,5 @@ describe('vulcan gap buffer', () => {
     buffer.insert('s');
     buffer.insert('t');
     console.log(...buffer.document);
-    console.log(...buffer.sizeArray);
   });
 });
