@@ -71,6 +71,12 @@ export default class GapBuffer {
     }
   }
 
+  paste(text) {
+    _.forEach(text, (char) => {
+      this.insert(char);
+    });
+  }
+
   adjust(char) {
     const charSize = mockSizing(char);
     if (this.gapLeft === 0) {

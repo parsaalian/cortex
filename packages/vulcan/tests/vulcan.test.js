@@ -4,18 +4,10 @@ import GapBuffer from '..';
 describe('vulcan gap buffer', () => {
   it('should be tested', () => {
     const buffer = new GapBuffer();
-    buffer.insert('t');
-    buffer.insert('e');
-    buffer.insert('s');
-    buffer.insert('t');
-    buffer.insert('t');
-    buffer.insert('e');
-    buffer.insert('s');
-    buffer.insert('t');
-    buffer.insert('t');
-    buffer.insert('e');
-    buffer.insert('s');
-    buffer.insert('t');
-    console.log(...buffer.document);
+    let time = 0;
+    const date = new Date().getTime();
+    buffer.insert('a');
+    time += new Date().getTime() - date;
+    console.log(time);
   });
 });
