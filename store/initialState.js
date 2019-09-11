@@ -1,5 +1,8 @@
 // @flow
+import _ from 'lodash';
 import { NORMAL } from './constants/editor';
+
+const GAP = 'GAP';
 
 export default {
   format: {
@@ -17,31 +20,10 @@ export default {
     },
   },
   document: {
-    cursor: [0, 0, 0, 0],
-    pages: [
-      {
-        lineGroups: [
-          {
-            type: NORMAL,
-            level: 0,
-            spaces: 0,
-            wordGroups: [
-              {
-                type: NORMAL,
-                characters: '',
-                size: [0, 0],
-              },
-            ],
-            size: [0, 0],
-          },
-        ],
-        footnotes: [],
-        size: 0,
-      },
-    ],
-    headings: [],
-    footnotes: [],
-    images: [],
-    tables: [],
+    gapSize: 128,
+    gapLeft: 0,
+    gapRight: 127,
+    paging: [[{ start: 0 }]],
+    content: _.times(128, _.constant(GAP)),
   },
 };

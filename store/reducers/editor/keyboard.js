@@ -10,104 +10,189 @@ import typing from '~/packages/cadmus';
 import { INSERT_CHAR, INSERT_SPACE, INSERT_ENTER, REMOVE_CHAR } from '~/packages/cadmus/constants';
 
 const maxWidth = 559;
-const maxHeight = 36;
+const maxHeight = 20;
+const lineSize = 18;
+const GAP = 'GAP';
+
+function grow(position, draft) {
+  draft.content = [
+    ..._.slice(draft.content, 0, position),
+    ..._.times(128, _.constant(GAP)),
+    ..._.slice(draft.content, position),
+  ];
+  draft.gapLeft = position;
+  draft.gapRight = position + 127;
+  draft.gapSize = 128;
+}
+
+function left() {
+  if (this.gapLeft !== 0) {
+    this.gapLeft -= 1;
+    this.gapRight -= 1;
+    this.document[this.gapRight + 1] = this.document[this.gapLeft];
+    this.document[this.gapLeft] = GAP;
+  }
+}
+
+function right() {
+  if (this.gapRight !== this.document.length - 1) {
+    this.gapLeft += 1;
+    this.gapRight += 1;
+    this.document[this.gapLeft - 1] = this.document[this.gapRight];
+    this.document[this.gapRight] = GAP;
+  }
+}
+
+function move(position) {
+  this.document = [
+    ..._.slice(this.document, 0, this.gapLeft),
+    ..._.slice(this.document, this.gapRight + 1),
+  ];
+  if (_.inRange(position, 0, this.document.length + 1)) {
+    this.grow(position);
+  } else if (position < 0) {
+    this.grow(0);
+  } else {
+    this.grow(this.document.length);
+  }
+}
+
+function paste(text) {
+  _.forEach(text, (char) => {
+    this.insert(char);
+  });
+}
+
+function adjust(char, draft) {
+  const charSize = sizing(char).width;
+  if (draft.gapLeft === 0) {
+    draft.content[draft.gapLeft] = {
+      char,
+      side: charSize,
+      top: 0,
+      page: 0,
+      line: 0,
+    };
+    if (_.isUndefined(draft.content[draft.gapRight + 1])) {
+      draft.paging[0][0].end = 0;
+    }
+  } else if (draft.content[draft.gapLeft - 1].side + charSize < maxWidth) {
+    draft.content[draft.gapLeft] = {
+      char,
+      side: draft.content[draft.gapLeft - 1].side + charSize,
+      top: draft.content[draft.gapLeft - 1].top,
+      page: draft.content[draft.gapLeft - 1].page,
+      line: draft.content[draft.gapLeft - 1].line,
+    };
+    if (_.isUndefined(draft.content[draft.gapRight + 1])) {
+      draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].end =
+        draft.gapLeft;
+    }
+  } else if (
+    draft.content[draft.gapLeft - 1].side + charSize >= maxWidth &&
+    draft.content[draft.gapLeft - 1].top + lineSize < maxHeight
+  ) {
+    draft.content[draft.gapLeft] = {
+      char,
+      side: charSize,
+      top: draft.content[draft.gapLeft - 1].top + lineSize,
+      page: draft.content[draft.gapLeft - 1].page,
+      line: draft.content[draft.gapLeft - 1].line + 1,
+    };
+    draft.paging[draft.content[draft.gapLeft - 1].page][draft.content[draft.gapLeft - 1].line].end =
+      draft.gapLeft - 1;
+    if (
+      _.isUndefined(
+        draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line],
+      )
+    ) {
+      draft.paging[draft.content[draft.gapLeft].page].push({
+        start: draft.gapLeft,
+        end: draft.gapLeft,
+      });
+    } else {
+      draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].start =
+        draft.gapLeft;
+    }
+  } else {
+    draft.content[draft.gapLeft] = {
+      char,
+      side: charSize,
+      top: 0,
+      page: draft.content[draft.gapLeft - 1].page + 1,
+      line: 0,
+    };
+    draft.paging[draft.content[draft.gapLeft - 1].page][draft.content[draft.gapLeft - 1].line].end =
+      draft.gapLeft - 1;
+    if (_.isUndefined(draft.paging[draft.content[draft.gapLeft].page])) {
+      draft.paging.push([{ start: draft.gapLeft }]);
+    } else if (
+      _.isUndefined(
+        draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line],
+      )
+    ) {
+      draft.paging[draft.content[draft.gapLeft].page].push({ start: draft.gapLeft });
+    } else {
+      draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].start =
+        draft.gapLeft;
+    }
+  }
+  draft.content = _.map(draft.content, (size, index) => {
+    if (index > draft.gapRight) {
+      const leftIndex = index === draft.gapRight + 1 ? draft.gapLeft : index - 1;
+      if (draft.content[index].side + charSize < maxWidth) {
+        draft.content[index].side += charSize;
+        draft.content[index].top = draft.content[leftIndex].top;
+      } else if (
+        draft.content[index].side + charSize >= maxWidth &&
+        draft.content[index].top + lineSize < maxHeight
+      ) {
+        draft.content[index] = {
+          side: sizing(draft.content[index].char).width,
+          top: draft.content[index].top + lineSize,
+          line: draft.content[leftIndex].line + 1,
+        };
+        draft.paging[draft.content[leftIndex].page][draft.content[leftIndex].line].end = leftIndex;
+        if (_.isUndefined(draft.paging[draft.content[index].page][draft.content[index].line])) {
+          draft.paging[draft.content[index].page].push({ start: index - 128 });
+        } else {
+          draft.paging[draft.content[index].page][draft.content[index].line].start = index - 128;
+        }
+      } else {
+        draft.content[index] = {
+          side: draft.content[index].side - draft.content[leftIndex].side - charSize,
+          top: 0,
+          page: draft.content[leftIndex].page + 1,
+          line: 0,
+        };
+        draft.paging[draft.content[leftIndex].page][draft.content[leftIndex].line].end = leftIndex;
+        if (_.isUndefined(draft.paging[draft.content[index].page])) {
+          draft.paging.push([{ start: index - 128 }]);
+        } else if (
+          _.isUndefined(draft.paging[draft.content[index].page][draft.content[index].line])
+        ) {
+          draft.paging[draft.content[index].page].push({ start: index - 128 });
+        } else {
+          draft.paging[draft.content[index].page][draft.content[index].line].start = index - 128;
+        }
+      }
+    }
+    return size;
+  });
+}
 
 // typing reducers
 const typeCharReducer = handleAction(
   INSERT_CHAR,
   (state, action) =>
     produce(state, (draft) => {
-      const { cursor } = draft;
-      const page = draft.pages[cursor[0]];
-      const line = page.lineGroups[cursor[1]];
-      const word = line.wordGroups[cursor[2]];
-
-      const content = action.payload;
-      const contentSize = sizing(content);
-
-      const inserted = insertChar(
-        draft.pages[cursor[0]].lineGroups[cursor[1]].wordGroups[cursor[2]].characters,
-        cursor[3],
-        content,
-      );
-      const size = sizing(inserted);
-
-      if (line.size[1] + (size.width - word.size[1]) <= maxWidth) {
-        console.log(1);
-        word.characters = inserted;
-
-        page.size = line.size[0] > size.height ? page.size : page.size - line.size[0] + size.height;
-
-        line.size[0] = _.max([line.size[0], size.height]);
-        line.size[1] += size.width - word.size[1];
-
-        word.size[0] = _.max([word.size[0], size.height]);
-        word.size[1] = size.width;
-
-        cursor[3] += 1;
-      } else if (
-        _.isUndefined(page.lineGroups[cursor[1] + 1]) &&
-        page.size + contentSize.height <= maxHeight
-      ) {
-        console.log(2);
-        const initialLine = { ...initialState.document.pages[0].lineGroups[0] };
-        const initialWord = { ...initialState.document.pages[0].lineGroups[0].wordGroups[0] };
-        page.lineGroups.push(initialLine);
-        cursor[1] += 1;
-        cursor[2] = 0;
-
-        const newLine = page.lineGroups[cursor[1]];
-
-        if (size.width > maxWidth) {
-          initialWord.characters = content;
-
-          page.size += contentSize.height;
-          newLine.size = [contentSize.height, contentSize.width];
-          initialWord.size = [contentSize.height, contentSize.width];
-
-          cursor[3] = content.length;
-        } else {
-          line.wordGroups = _.dropRight(line.wordGroups);
-
-          initialWord.characters = inserted;
-          initialWord.size = [size.height, size.width];
-
-          page.size += size.height;
-          newLine.size = [size.height, size.width];
-          newLine.wordGroups = [initialWord];
-          console.log(initialState.document.pages[0].lineGroups[0]);
-
-          cursor[3] = inserted.length;
-        }
-      } else if (
-        !_.isUndefined(page.lineGroups[cursor[1] + 1]) &&
-        page.size + contentSize.height <= maxHeight
-      ) {
-        // pass
-      } else if (_.isUndefined(draft.pages[cursor[0] + 1])) {
-        const initialPage = _.assign({}, initialState.document.pages[0]);
-        draft.pages.push(initialPage);
-        cursor[0] += 1;
-        cursor[1] = 0;
-        cursor[2] = 0;
-        if (size.width > maxWidth) {
-          const newPage = draft.pages[cursor[0]];
-          const newLine = newPage.lineGroups[cursor[1]];
-          const newWord = newLine.wordGroups[cursor[2]];
-
-          newWord.characters = content;
-
-          newPage.size = contentSize.height;
-          newLine.size = [contentSize.height, contentSize.width];
-          newWord.size = [contentSize.height, contentSize.width];
-
-          cursor[3] = content.length;
-        }
-      } else {
-        console.log(5);
-        // pass
+      const char = action.payload;
+      adjust(char, draft);
+      draft.gapLeft += 1;
+      draft.gapSize -= 1;
+      if (draft.gapSize === 0) {
+        grow(draft.gapLeft, draft);
       }
-
       return draft;
     }),
   initialState.document,

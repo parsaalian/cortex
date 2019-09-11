@@ -17,6 +17,7 @@ export default class GapBuffer {
     this.gapLeft = 0;
     this.gapRight = size - 1;
     this.document = _.times(size, _.constant(GAP));
+    this.pages = [[{ start: 0 }]];
   }
 
   grow(position) {
@@ -106,6 +107,21 @@ export default class GapBuffer {
         page: this.document[this.gapLeft - 1].page,
         line: this.document[this.gapLeft - 1].line + 1,
       };
+      this.pages[this.document[this.gapLeft].page][this.document[this.gapLeft - 1].line].end =
+        this.gapLeft - 1;
+      if (
+        !_.isUndefined(
+          this.pages[this.document[this.gapLeft].page][this.document[this.gapLeft].line],
+        )
+      ) {
+        this.pages[this.document[this.gapLeft].page][
+          this.document[this.gapLeft].line
+        ].start = this.gapLeft;
+      } else {
+        this.pages[this.document[this.gapLeft].page][this.document[this.gapLeft].line].push({
+          start: this.gapLeft,
+        });
+      }
     } else {
       this.document[this.gapLeft] = {
         char,
@@ -114,6 +130,17 @@ export default class GapBuffer {
         page: this.document[this.gapLeft - 1].page + 1,
         line: 0,
       };
+      this.pages[this.document[this.gapLeft].page][this.document[this.gapLeft - 1].page].end =
+        this.gapLeft - 1;
+      if (!_.isUndefined(this.pages[this.document[this.gapLeft].page])) {
+        this.pages[this.document[this.gapLeft].page][
+          this.document[this.gapLeft].page
+        ].start = this.gapLeft;
+      } else {
+        this.pages[this.document[this.gapLeft].page][this.document[this.gapLeft].page].push({
+          start: this.gapLeft,
+        });
+      }
     }
     this.document = _.map(this.document, (size, index) => {
       if (index > this.gapRight) {

@@ -4,12 +4,10 @@ import { keyboardEvent } from '~/store/actions/editor';
 import Document from '~/web/views/editor/components/document';
 
 const getDocumentText = (state) => {
-  const { document } = state;
-  return _.map(document.pages, (page) =>
-    _.map(page.lineGroups, (lineGroup) =>
-      _.map(lineGroup.wordGroups, (wordGroup) =>
-        _.map(wordGroup.characters, (character) => character),
-      ),
+  const { content, paging } = state.document;
+  return _.map(paging, (pages) =>
+    _.map(pages, (lines) =>
+      _.map(_.slice(content, lines.start, lines.end + 1), (part) => part.char),
     ),
   );
 };
