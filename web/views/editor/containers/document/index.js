@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { keyboardEvent } from '~/store/actions/editor';
+import { keyboardEvent } from '~/redux/actions/editor';
 import Document from '~/web/views/editor/components/document';
 
 const getDocumentText = (state) => {

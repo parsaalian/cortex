@@ -2,16 +2,16 @@
 import _ from 'lodash';
 import produce from 'immer';
 import { handleAction } from 'redux-actions';
-import insertChar from '~/store/utils/helperFunctions';
-import initialState from '~/store/initialState';
-import { KEYBOARD_EVENT } from '~/store/actions/editor';
-import sizing from '~/store/utils/editor/sizing';
+import insertChar from '~/redux/utils/helperFunctions';
+import initialState from '~/redux/stores/editor/initialState';
+import { KEYBOARD_EVENT } from '~/redux/actions/editor';
+import sizing from '~/redux/utils/editor/sizing';
 import typing, {
   INSERT_CHAR,
   INSERT_SPACE,
   INSERT_ENTER,
   REMOVE_CHAR,
-} from '~/store/utils/editor/typing';
+} from '~/redux/utils/editor/typing';
 
 const maxWidth = 559;
 const maxHeight = 20;

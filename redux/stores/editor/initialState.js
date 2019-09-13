@@ -1,6 +1,6 @@
 // @flow
 import _ from 'lodash';
-import { NORMAL } from './constants/editor';
+import { NORMAL } from '~/redux/constants/editor';
 
 const GAP = 'GAP';
 

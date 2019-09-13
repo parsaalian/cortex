@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import Document from './containers/document';
 
 // import startup from './utils/startup';
-import store from '~/store';
+import store from '~/redux/stores/editor';
 
 export default function EditorProvider(): Node {
   // start up

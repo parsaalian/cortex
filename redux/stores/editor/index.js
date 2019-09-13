@@ -1,6 +1,6 @@
 // import _ from 'lodash';
 import { createStore, applyMiddleware } from 'redux';
-import editorReducers from './reducers/editor';
+import editorReducers from '~/redux/reducers/editor';
 // import { loadState, saveState } from './utils/localStorage';
 
 const logger = (store) => (next) => (action) => {
