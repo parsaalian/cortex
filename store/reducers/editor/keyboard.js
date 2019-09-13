@@ -4,7 +4,7 @@ import produce from 'immer';
 import { handleAction } from 'redux-actions';
 import insertChar from '../utils';
 import initialState from '~/store/initialState';
-import { KEYBOARD_EVENT } from '~/store/constants/actions/editor';
+import { KEYBOARD_EVENT } from '~/store/actions/editor';
 import sizing from '~/store/utils/editor/sizing';
 import typing, {
   INSERT_CHAR,

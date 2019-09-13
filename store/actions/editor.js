@@ -1,19 +1,29 @@
-// @flow
-import { createAction } from 'redux-actions';
-import { MOVE_CURSOR, CHANGE_STYLE, KEYBOARD_EVENT } from '../constants/actions/editor';
+// cursor actions
+export const MOVE_CURSOR = 'EDITOR/MOVE_CURSOR';
+export function moveCursor(direction) {
+  return {
+    type: MOVE_CURSOR,
+    payload: { direction },
+  };
+}
 
-// cursor action creators
-export const moveCursor = createAction(MOVE_CURSOR);
+// styling actions
+export const CHANGE_STYLE = 'EDITOR/CHANGE_STYLE';
+export function changeStyle(style) {
+  return {
+    type: CHANGE_STYLE,
+    payload: { style },
+  };
+}
 
-// styling action creators
-export const changeStyle = createAction(CHANGE_STYLE);
-
-// keyboard action creators
-// TODO: change event type to keyboard event
-export const keyboardEvent = createAction(KEYBOARD_EVENT, (event: string): {
-  key: string,
-  code: number,
-} => ({
-  key: event.key,
-  code: event.keyCode,
-}));
+// typing actions
+export const KEYBOARD_EVENT = 'EDITOR/KEYBOARD_EVENT';
+export function keyboardEvent(event) {
+  return {
+    type: KEYBOARD_EVENT,
+    payload: {
+      key: event.key,
+      code: event.keyCode,
+    },
+  };
+}
