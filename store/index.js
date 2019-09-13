@@ -1,7 +1,7 @@
 // import _ from 'lodash';
 import { createStore, applyMiddleware } from 'redux';
 import editorReducers from './reducers/editor';
-// import { loadState, saveState } from '~/packages/nemosyne';
+// import { loadState, saveState } from './utils/localStorage';
 
 const logger = (store) => (next) => (action) => {
   // console.log('dispatching', action);
