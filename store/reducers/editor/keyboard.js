@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import produce from 'immer';
 import { handleAction } from 'redux-actions';
-import insertChar from '../utils';
+import insertChar from '~/store/utils/helperFunctions';
 import initialState from '~/store/initialState';
 import { KEYBOARD_EVENT } from '~/store/actions/editor';
 import sizing from '~/store/utils/editor/sizing';
