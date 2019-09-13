@@ -1,4 +1,3 @@
-// @flow
 import _ from 'lodash';
 import { NORMAL } from '~/redux/constants/editor';
 

@@ -1,14 +1,17 @@
-import React from 'react';
+// @flow
+import React, { type Node } from 'react';
 import Head from 'next/head';
 import Editor from '~/web/views/editor';
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Editor</title>
-    </Head>
-    <Editor />
-  </div>
-);
+function Home(): Node {
+  return (
+    <div>
+      <Head>
+        <title>Editor</title>
+      </Head>
+      <Editor />
+    </div>
+  );
+}
 
 export default Home;

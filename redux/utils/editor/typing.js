@@ -1,5 +1,3 @@
-import { createAction } from 'redux-actions';
-
 export const keyMap = {
   8: 'backspace',
   9: 'tab',
@@ -108,11 +106,26 @@ export const INSERT_SPACE = 'CADMUS/INSERT_SPACE';
 export const INSERT_ENTER = 'CADMUS/INSERT_ENTER';
 export const REMOVE_CHAR = 'CADMUS/REMOVE_CHAR';
 
-const empty = createAction(EMPTY);
-const insertChar = createAction(INSERT_CHAR, (event) => event.key);
-const insertSpace = createAction(INSERT_SPACE);
-const insertEnter = createAction(INSERT_ENTER);
-const removeChar = createAction(REMOVE_CHAR);
+const empty = (e) => ({
+  type: EMPTY,
+});
+
+const insertChar = (event) => ({
+  type: INSERT_CHAR,
+  payload: event.key,
+});
+
+const insertSpace = (e) => ({
+  type: INSERT_SPACE,
+});
+
+const insertEnter = (e) => ({
+  type: INSERT_ENTER,
+});
+
+const removeChar = (e) => ({
+  type: REMOVE_CHAR,
+});
 
 export const actionStorage = {
   0: (e) => insertChar(e),

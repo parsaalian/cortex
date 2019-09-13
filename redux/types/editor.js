@@ -18,15 +18,25 @@ export type StyleType = {
 
 // cursor types
 export type MoveCursorType = {
-  direction: string,
+  type: string,
+  payload: {
+    direction: string,
+  },
 };
 
 // style types
 export type ChangeStyleType = {
-  style: StyleType,
+  type: string,
+  payload: {
+    style: StyleType,
+  },
 };
 
 // typing types
-export type TypeCharType = {
-  char: string,
+export type KeyboadEventType = {
+  type: string,
+  payload: {
+    key: string,
+    code: number,
+  },
 };

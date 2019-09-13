@@ -1,9 +1,10 @@
 [ignore]
 .*/node_modules/.*
 .*/build/.*
+.*/flow-typed/.*
 
 [include]
-./src/**
+
 
 [libs]
 ./flow-typed
@@ -11,6 +12,6 @@
 [lints]
 
 [options]
-module.name_mapper='^{rootPathPrefix}/\(.*\)$' -> '<PROJECT_ROOT>/{rootPathSuffix}/\1'
+module.name_mapper='^~\/\(.*\)$' -> '<PROJECT_ROOT>/\1'
 
 [strict]
