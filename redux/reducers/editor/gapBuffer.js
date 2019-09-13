@@ -24,6 +24,7 @@ export function paste(text, draft) {
   });
 }
 
+// TODO: refactor this method
 export function adjust(char, draft) {
   const charSize = sizing(char).width;
   if (draft.gapLeft === 0) {
