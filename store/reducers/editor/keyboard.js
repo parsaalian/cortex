@@ -6,13 +6,19 @@ import insertChar from '../utils';
 import initialState from '~/store/initialState';
 import { KEYBOARD_EVENT } from '~/store/constants/actions/editor';
 import sizing from '~/packages/damastes';
-import typing from '~/packages/cadmus';
-import { INSERT_CHAR, INSERT_SPACE, INSERT_ENTER, REMOVE_CHAR } from '~/packages/cadmus/constants';
+import typing, {
+  INSERT_CHAR,
+  INSERT_SPACE,
+  INSERT_ENTER,
+  REMOVE_CHAR,
+} from '~/store/utils/editor/typing';
 
 const maxWidth = 559;
 const maxHeight = 20;
 const lineSize = 18;
 const GAP = 'GAP';
+
+// BUG: change sizing of the last word on character insert
 
 function grow(position, draft) {
   draft.content = [

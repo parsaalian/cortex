@@ -4,7 +4,6 @@ import type { Node } from 'react';
 import { Provider } from 'react-redux';
 
 import Document from './containers/document';
-// import StylePicker from './containers/stylePicker';
 
 // import startup from './utils/startup';
 import store from '~/store';
@@ -16,7 +15,6 @@ export default function EditorProvider(): Node {
   return (
     <Provider store={store}>
       <Document />
-      {/* <StylePicker /> */}
     </Provider>
   );
 }
