@@ -1,26 +1,13 @@
-/* eslint {no-param-reassign: off, no-unused-vars: off} */
 import _ from 'lodash';
-import produce from 'immer';
-import { handleAction } from 'redux-actions';
-import insertChar from '~/redux/utils/helperFunctions';
-import initialState from '~/redux/stores/editor/initialState';
-import { KEYBOARD_EVENT } from '~/redux/actions/editor';
 import sizing from '~/redux/utils/editor/sizing';
-import typing, {
-  INSERT_CHAR,
-  INSERT_SPACE,
-  INSERT_ENTER,
-  REMOVE_CHAR,
-} from '~/redux/utils/editor/typing';
 
 const maxWidth = 559;
 const maxHeight = 20;
 const lineSize = 18;
-const GAP = 'GAP';
+const GAP = 'BUFFER/GAP';
 
-// BUG: change sizing of the last word on character insert
-
-function grow(position, draft) {
+// insertion related functions
+export function grow(position, draft) {
   draft.content = [
     ..._.slice(draft.content, 0, position),
     ..._.times(128, _.constant(GAP)),
@@ -31,45 +18,13 @@ function grow(position, draft) {
   draft.gapSize = 128;
 }
 
-function left() {
-  if (this.gapLeft !== 0) {
-    this.gapLeft -= 1;
-    this.gapRight -= 1;
-    this.document[this.gapRight + 1] = this.document[this.gapLeft];
-    this.document[this.gapLeft] = GAP;
-  }
-}
-
-function right() {
-  if (this.gapRight !== this.document.length - 1) {
-    this.gapLeft += 1;
-    this.gapRight += 1;
-    this.document[this.gapLeft - 1] = this.document[this.gapRight];
-    this.document[this.gapRight] = GAP;
-  }
-}
-
-function move(position) {
-  this.document = [
-    ..._.slice(this.document, 0, this.gapLeft),
-    ..._.slice(this.document, this.gapRight + 1),
-  ];
-  if (_.inRange(position, 0, this.document.length + 1)) {
-    this.grow(position);
-  } else if (position < 0) {
-    this.grow(0);
-  } else {
-    this.grow(this.document.length);
-  }
-}
-
-function paste(text) {
+export function paste(text, draft) {
   _.forEach(text, (char) => {
-    this.insert(char);
+    draft.insert(char);
   });
 }
 
-function adjust(char, draft) {
+export function adjust(char, draft) {
   const charSize = sizing(char).width;
   if (draft.gapLeft === 0) {
     draft.content[draft.gapLeft] = {
@@ -187,70 +142,35 @@ function adjust(char, draft) {
   });
 }
 
-// typing reducers
-const typeCharReducer = handleAction(
-  INSERT_CHAR,
-  (state, action) =>
-    produce(state, (draft) => {
-      const char = action.payload;
-      adjust(char, draft);
-      draft.gapLeft += 1;
-      draft.gapSize -= 1;
-      if (draft.gapSize === 0) {
-        grow(draft.gapLeft, draft);
-      }
-      return draft;
-    }),
-  initialState.document,
-);
-
-const insertSpaceReducer = handleAction(
-  INSERT_SPACE,
-  (state, action) =>
-    produce(state, (draft) => {
-      const { cursor } = draft;
-      const initialWord = _.assign({}, initialState.document.pages[0].lineGroups[0].wordGroups[0]);
-      const line = draft.pages[cursor[0]].lineGroups[cursor[1]];
-      line.wordGroups.push(initialWord);
-      line.size[1] += 4;
-      cursor[2] += 1;
-      cursor[3] = 0;
-    }),
-  initialState.document,
-);
-
-const insertEnterReducer = handleAction(
-  INSERT_ENTER,
-  (state, action) => state,
-  initialState.document,
-);
-
-const removeCharReducer = handleAction(
-  REMOVE_CHAR,
-  (state, action) => state,
-  initialState.document,
-);
-
-export default function keyboardReducer(state = initialState.document, action) {
-  let typingAction;
-  if (action.type === KEYBOARD_EVENT) {
-    typingAction = typing(action.payload);
+// cursor related functions
+export function left(draft) {
+  if (draft.gapLeft !== 0) {
+    draft.gapLeft -= 1;
+    draft.gapRight -= 1;
+    draft.content[draft.gapRight + 1] = draft.content[draft.gapLeft];
+    draft.content[draft.gapLeft] = GAP;
   }
-  switch (action.type) {
-    case KEYBOARD_EVENT:
-      switch (typingAction.type) {
-        case INSERT_CHAR:
-          return typeCharReducer(state, typingAction);
-        case INSERT_SPACE:
-          return insertSpaceReducer(state, typingAction);
-        case INSERT_ENTER:
-          return insertEnterReducer(state, typingAction);
-        case REMOVE_CHAR:
-          return removeCharReducer(state, typingAction);
-        default:
-          return state;
-      }
-    default:
-      return state;
+}
+
+export function right(draft) {
+  if (draft.gapRight !== draft.content.length - 1) {
+    draft.gapLeft += 1;
+    draft.gapRight += 1;
+    draft.content[draft.gapLeft - 1] = draft.content[draft.gapRight];
+    draft.content[draft.gapRight] = GAP;
+  }
+}
+
+export function move(position, draft) {
+  draft.document = [
+    ..._.slice(draft.document, 0, draft.gapLeft),
+    ..._.slice(draft.document, draft.gapRight + 1),
+  ];
+  if (_.inRange(position, 0, draft.document.length + 1)) {
+    draft.grow(position);
+  } else if (position < 0) {
+    draft.grow(0);
+  } else {
+    draft.grow(draft.document.length);
   }
 }

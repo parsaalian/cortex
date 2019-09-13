@@ -86,7 +86,8 @@
             "always"
         ],
         "flowtype/use-flow-type": 1,
-        "flowtype/valid-syntax": 1
+        "flowtype/valid-syntax": 1,
+        'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['draft'] }],
     },
     "settings": {
       "flowtype": {
