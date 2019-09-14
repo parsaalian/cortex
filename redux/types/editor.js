@@ -1,17 +1,39 @@
 // @flow
+export type DocumentType = {
+  gapSize: number,
+  gapLeft: number,
+  gapRight: number,
+  paging: Array<
+    Array<{
+      start: number,
+      end: number,
+    }>,
+  >,
+  content: Array<
+    | string
+    | {
+        char: string,
+        side: number,
+        top: number,
+        page: number,
+        line: number,
+      },
+  >,
+};
+
 export type StyleType = {
-  +format?: ?{
-    +direction?: ?string,
-    +text?: {
-      +bold?: ?boolean,
-      +italic?: ?boolean,
-      +underline?: ?boolean,
-      +strikethrough?: ?boolean,
-      +script?: ?string,
-      +case?: ?string,
+  format?: ?{
+    direction?: ?string,
+    text?: {
+      bold?: ?boolean,
+      italic?: ?boolean,
+      underline?: ?boolean,
+      strikethrough?: ?boolean,
+      script?: ?string,
+      case?: ?string,
     },
-    +paragraph?: ?{
-      +style?: ?string,
+    paragraph?: ?{
+      style?: ?string,
     },
   },
 };
@@ -19,21 +41,17 @@ export type StyleType = {
 // cursor types
 export type MoveCursorType = {
   type: string,
-  payload: {
-    direction: string,
-  },
+  payload: string,
 };
 
 // style types
 export type ChangeStyleType = {
   type: string,
-  payload: {
-    style: StyleType,
-  },
+  payload: StyleType,
 };
 
 // typing types
-export type KeyboadEventType = {
+export type KeyboardEventType = {
   type: string,
   payload: {
     key: string,

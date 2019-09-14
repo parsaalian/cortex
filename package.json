@@ -48,7 +48,6 @@
     "eslint-plugin-react": "^7.14.3",
     "flow-bin": "^0.106.3",
     "flow-typed": "^2.6.1",
-    "jest-flow-transform": "^1.0.1",
-    "snyk": "^1.226.2"
+    "jest-flow-transform": "^1.0.1"
   }
 }

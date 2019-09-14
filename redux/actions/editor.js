@@ -3,7 +3,7 @@ import type {
   StyleType,
   MoveCursorType,
   ChangeStyleType,
-  KeyboadEventType,
+  KeyboardEventType,
 } from '~/redux/types/editor';
 
 // cursor actions
@@ -11,7 +11,7 @@ export const MOVE_CURSOR = 'EDITOR/MOVE_CURSOR';
 export function moveCursor(direction: string): MoveCursorType {
   return {
     type: MOVE_CURSOR,
-    payload: { direction },
+    payload: direction,
   };
 }
 
@@ -20,13 +20,13 @@ export const CHANGE_STYLE = 'EDITOR/CHANGE_STYLE';
 export function changeStyle(style: StyleType): ChangeStyleType {
   return {
     type: CHANGE_STYLE,
-    payload: { style },
+    payload: style,
   };
 }
 
 // typing actions
 export const KEYBOARD_EVENT = 'EDITOR/KEYBOARD_EVENT';
-export function keyboardEvent(event: SyntheticKeyboardEvent<HTMLElement>): KeyboadEventType {
+export function keyboardEvent(event: SyntheticKeyboardEvent<HTMLElement>): KeyboardEventType {
   return {
     type: KEYBOARD_EVENT,
     payload: {

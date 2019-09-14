@@ -1,31 +1,67 @@
+// @flow
 import _ from 'lodash';
-import sizing from '~/redux/utils/editor/sizing';
+import type { DocumentType } from '~/redux/types/editor';
+import sizing, { wordSizes } from '~/redux/utils/editor/sizing';
 
 const maxWidth = 559;
 const maxHeight = 20;
 const lineSize = 18;
+const SPC = 'BUFFER/SPACE';
 const GAP = 'BUFFER/GAP';
 
 // insertion related functions
-export function grow(position, draft) {
-  draft.content = [
-    ..._.slice(draft.content, 0, position),
+export function grow(position: number, draft: DocumentType): DocumentType {
+  const draftCopy = { ...draft };
+  draftCopy.content = [
+    ..._.slice(draftCopy.content, 0, position),
     ..._.times(128, _.constant(GAP)),
-    ..._.slice(draft.content, position),
+    ..._.slice(draftCopy.content, position),
   ];
-  draft.gapLeft = position;
-  draft.gapRight = position + 127;
-  draft.gapSize = 128;
+  draftCopy.gapLeft = position;
+  draftCopy.gapRight = position + 127;
+  draftCopy.gapSize = 128;
+  return draftCopy;
 }
 
-export function paste(text, draft) {
-  _.forEach(text, (char) => {
-    draft.insert(char);
-  });
+function getCurrentWord(
+  char: string,
+  draft: DocumentType,
+): {
+  leftLength: number,
+  rightLength: number,
+  cursor: number,
+  word: string,
+} {
+  const leftWord = [];
+  const rightWord = [];
+  let leftCursor = draft.gapLeft - 1;
+  let rightCursor = draft.gapRight + 1;
+  while (draft.content[leftCursor] !== SPC && leftCursor >= 0) {
+    leftWord.push(draft.content[leftCursor].char);
+    leftCursor -= 1;
+  }
+  while (draft.content[rightCursor] !== SPC && rightCursor < draft.content.length) {
+    rightWord.push(draft.content[rightWord].char);
+    rightCursor += 1;
+  }
+  return {
+    leftLength: leftWord.length,
+    rightLength: rightWord.length,
+    cursor: draft.gapLeft - leftCursor - 1,
+    word: _.join(_.concat(_.reverse(leftWord), [char], rightWord), ''),
+  };
+}
+
+function insertChar(char: string, draft: DocumentType): DocumentType {
+  const currentWord = getCurrentWord(char, draft);
+  console.log(currentWord);
+  const sizes = wordSizes(currentWord.word);
+  console.log(sizes);
 }
 
 // TODO: refactor this method
-export function adjust(char, draft) {
+export function adjust(char: string, draft: DocumentType): DocumentType {
+  insertChar(char, draft);
   const charSize = sizing(char).width;
   if (draft.gapLeft === 0) {
     draft.content[draft.gapLeft] = {
@@ -87,19 +123,22 @@ export function adjust(char, draft) {
     draft.paging[draft.content[draft.gapLeft - 1].page][draft.content[draft.gapLeft - 1].line].end =
       draft.gapLeft - 1;
     if (_.isUndefined(draft.paging[draft.content[draft.gapLeft].page])) {
-      draft.paging.push([{ start: draft.gapLeft }]);
+      draft.paging.push([{ start: draft.gapLeft, end: draft.gapLeft }]);
     } else if (
       _.isUndefined(
         draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line],
       )
     ) {
-      draft.paging[draft.content[draft.gapLeft].page].push({ start: draft.gapLeft });
+      draft.paging[draft.content[draft.gapLeft].page].push({
+        start: draft.gapLeft,
+        end: draft.gapLeft,
+      });
     } else {
       draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].start =
         draft.gapLeft;
     }
   }
-  draft.content = _.map(draft.content, (size, index) => {
+  draft.content = _.map(draft.content, (size: number, index: number): number => {
     if (index > draft.gapRight) {
       const leftIndex = index === draft.gapRight + 1 ? draft.gapLeft : index - 1;
       if (draft.content[index].side + charSize < maxWidth) {
@@ -110,18 +149,21 @@ export function adjust(char, draft) {
         draft.content[index].top + lineSize < maxHeight
       ) {
         draft.content[index] = {
+          char: draft.content[index].char,
           side: sizing(draft.content[index].char).width,
           top: draft.content[index].top + lineSize,
+          page: draft.content[index].page,
           line: draft.content[leftIndex].line + 1,
         };
         draft.paging[draft.content[leftIndex].page][draft.content[leftIndex].line].end = leftIndex;
         if (_.isUndefined(draft.paging[draft.content[index].page][draft.content[index].line])) {
-          draft.paging[draft.content[index].page].push({ start: index - 128 });
+          draft.paging[draft.content[index].page].push({ start: index - 128, end: index - 128 });
         } else {
           draft.paging[draft.content[index].page][draft.content[index].line].start = index - 128;
         }
       } else {
         draft.content[index] = {
+          char: draft.content[index].char,
           side: draft.content[index].side - draft.content[leftIndex].side - charSize,
           top: 0,
           page: draft.content[leftIndex].page + 1,
@@ -129,11 +171,11 @@ export function adjust(char, draft) {
         };
         draft.paging[draft.content[leftIndex].page][draft.content[leftIndex].line].end = leftIndex;
         if (_.isUndefined(draft.paging[draft.content[index].page])) {
-          draft.paging.push([{ start: index - 128 }]);
+          draft.paging.push([{ start: index - 128, end: index - 128 }]);
         } else if (
           _.isUndefined(draft.paging[draft.content[index].page][draft.content[index].line])
         ) {
-          draft.paging[draft.content[index].page].push({ start: index - 128 });
+          draft.paging[draft.content[index].page].push({ start: index - 128, end: index - 128 });
         } else {
           draft.paging[draft.content[index].page][draft.content[index].line].start = index - 128;
         }
@@ -141,10 +183,11 @@ export function adjust(char, draft) {
     }
     return size;
   });
+  return draft;
 }
 
 // cursor related functions
-export function left(draft) {
+export function left(draft: DocumentType) {
   if (draft.gapLeft !== 0) {
     draft.gapLeft -= 1;
     draft.gapRight -= 1;
@@ -153,7 +196,7 @@ export function left(draft) {
   }
 }
 
-export function right(draft) {
+export function right(draft: DocumentType) {
   if (draft.gapRight !== draft.content.length - 1) {
     draft.gapLeft += 1;
     draft.gapRight += 1;
@@ -162,16 +205,16 @@ export function right(draft) {
   }
 }
 
-export function move(position, draft) {
-  draft.document = [
-    ..._.slice(draft.document, 0, draft.gapLeft),
-    ..._.slice(draft.document, draft.gapRight + 1),
+export function move(position: number, draft: DocumentType) {
+  draft.content = [
+    ..._.slice(draft.content, 0, draft.gapLeft),
+    ..._.slice(draft.content, draft.gapRight + 1),
   ];
-  if (_.inRange(position, 0, draft.document.length + 1)) {
-    draft.grow(position);
+  if (_.inRange(position, 0, draft.content.length + 1)) {
+    grow(position, draft);
   } else if (position < 0) {
-    draft.grow(0);
+    grow(0, draft);
   } else {
-    draft.grow(draft.document.length);
+    grow(draft.content.length, draft);
   }
 }
