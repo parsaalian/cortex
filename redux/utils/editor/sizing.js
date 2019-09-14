@@ -13,9 +13,9 @@ function createElement(text, style) {
     element.style[key] = value;
   });
   element.style.position = 'absolute';
-  // element.style.visibility = 'hidden';
-  element.style.left = '10px';
-  element.style.top = '10px';
+  element.style.visibility = 'hidden';
+  element.style.left = '-999px';
+  element.style.top = '-999px';
   element.style.height = 'auto';
   document.body.appendChild(element);
   return element;
