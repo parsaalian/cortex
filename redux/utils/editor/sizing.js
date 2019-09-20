@@ -31,7 +31,7 @@ export function wordSizes(text, style = {}) {
   _.forEach(_.range(text.length), (index) => {
     const ithSpan = document.getElementById(`sizing-char-${index}`);
     sizes.push({
-      width: (sizes[index - 1] ? sizes[index - 1].width : 0) + ithSpan.offsetWidth,
+      width: (_.isUndefined(sizes[index - 1]) ? 0 : sizes[index - 1].width) + ithSpan.offsetWidth,
       height: ithSpan.offsetHeight,
     });
   });

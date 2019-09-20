@@ -105,14 +105,15 @@ export const INSERT_CHAR = 'CADMUS/ADD_CHAR';
 export const INSERT_SPACE = 'CADMUS/INSERT_SPACE';
 export const INSERT_ENTER = 'CADMUS/INSERT_ENTER';
 export const REMOVE_CHAR = 'CADMUS/REMOVE_CHAR';
+export const MOVE_CURSOR = 'CADMUS/MOVE_CURSOR';
 
 const empty = (e) => ({
   type: EMPTY,
 });
 
-const insertChar = (event) => ({
+const insertChar = (e) => ({
   type: INSERT_CHAR,
-  payload: event.key,
+  payload: e.key,
 });
 
 const insertSpace = (e) => ({
@@ -125,6 +126,11 @@ const insertEnter = (e) => ({
 
 const removeChar = (e) => ({
   type: REMOVE_CHAR,
+});
+
+const moveCursor = (e) => ({
+  type: MOVE_CURSOR,
+  payload: e.key,
 });
 
 export const actionStorage = {
@@ -152,10 +158,10 @@ export const actionStorage = {
   page_down: (e) => empty(e),
   end: (e) => empty(e),
   home: (e) => empty(e),
-  left_arrow: (e) => empty(e),
-  up_arrow: (e) => empty(e),
-  right_arrow: (e) => empty(e),
-  down_arrow: (e) => empty(e),
+  left_arrow: (e) => moveCursor(e),
+  up_arrow: (e) => moveCursor(e),
+  right_arrow: (e) => moveCursor(e),
+  down_arrow: (e) => moveCursor(e),
   insert: (e) => insertSpace(e),
   delete: (e) => removeChar(e),
   a: (e) => insertChar(e),

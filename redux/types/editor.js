@@ -7,6 +7,7 @@ export type DocumentType = {
     Array<{
       start: number,
       end: number,
+      height: number,
     }>,
   >,
   content: Array<
@@ -14,7 +15,7 @@ export type DocumentType = {
     | {
         char: string,
         side: number,
-        top: number,
+        height: number,
         page: number,
         line: number,
       },

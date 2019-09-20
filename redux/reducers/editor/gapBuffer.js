@@ -1,13 +1,12 @@
 // @flow
 import _ from 'lodash';
 import type { DocumentType } from '~/redux/types/editor';
-import sizing, { wordSizes } from '~/redux/utils/editor/sizing';
+import { wordSizes } from '~/redux/utils/editor/sizing';
 
 const maxWidth = 559;
 const maxHeight = 20;
-const lineSize = 18;
-const SPC = 'BUFFER/SPACE';
-const GAP = 'BUFFER/GAP';
+export const SPC = 'BUFFER/SPACE';
+export const GAP = 'BUFFER/GAP';
 
 // insertion related functions
 export function grow(position: number, draft: DocumentType): DocumentType {
@@ -24,7 +23,7 @@ export function grow(position: number, draft: DocumentType): DocumentType {
 }
 
 function getCurrentWord(
-  char: string,
+  char: ?string,
   draft: DocumentType,
 ): {
   leftLength: number,
@@ -36,14 +35,24 @@ function getCurrentWord(
   const rightWord = [];
   let leftCursor = draft.gapLeft - 1;
   let rightCursor = draft.gapRight + 1;
+
   while (draft.content[leftCursor] !== SPC && leftCursor >= 0) {
-    leftWord.push(draft.content[leftCursor].char);
-    leftCursor -= 1;
+    if (typeof draft.content[leftCursor] === 'string') {
+      throw new Error('looped on string instead of object');
+    } else {
+      leftWord.push(draft.content[leftCursor].char);
+      leftCursor -= 1;
+    }
   }
   while (draft.content[rightCursor] !== SPC && rightCursor < draft.content.length) {
-    rightWord.push(draft.content[rightWord].char);
-    rightCursor += 1;
+    if (typeof draft.content[rightCursor] === 'string') {
+      throw new Error('looped on string instead of object');
+    } else {
+      rightWord.push(draft.content[rightCursor].char);
+      rightCursor += 1;
+    }
   }
+
   return {
     leftLength: leftWord.length,
     rightLength: rightWord.length,
@@ -52,169 +61,148 @@ function getCurrentWord(
   };
 }
 
-function insertChar(char: string, draft: DocumentType): DocumentType {
-  const currentWord = getCurrentWord(char, draft);
-  console.log(currentWord);
-  const sizes = wordSizes(currentWord.word);
-  console.log(sizes);
-}
+function getWordFromIndex(
+  index: number,
+  draft: DocumentType,
+): {
+  leftLength: number,
+  rightLength: number,
+  cursor: number,
+  word: string,
+} {
+  const leftWord = [];
+  const rightWord = [];
+  let leftCursor = index - 1;
+  let rightCursor = index + 1;
 
-// TODO: refactor this method
-export function adjust(char: string, draft: DocumentType): DocumentType {
-  insertChar(char, draft);
-  const charSize = sizing(char).width;
-  if (draft.gapLeft === 0) {
-    draft.content[draft.gapLeft] = {
-      char,
-      side: charSize,
-      top: 0,
-      page: 0,
-      line: 0,
-    };
-    if (_.isUndefined(draft.content[draft.gapRight + 1])) {
-      draft.paging[0][0].end = 0;
-    }
-  } else if (draft.content[draft.gapLeft - 1].side + charSize < maxWidth) {
-    draft.content[draft.gapLeft] = {
-      char,
-      side: draft.content[draft.gapLeft - 1].side + charSize,
-      top: draft.content[draft.gapLeft - 1].top,
-      page: draft.content[draft.gapLeft - 1].page,
-      line: draft.content[draft.gapLeft - 1].line,
-    };
-    if (_.isUndefined(draft.content[draft.gapRight + 1])) {
-      draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].end =
-        draft.gapLeft;
-    }
-  } else if (
-    draft.content[draft.gapLeft - 1].side + charSize >= maxWidth &&
-    draft.content[draft.gapLeft - 1].top + lineSize < maxHeight
-  ) {
-    draft.content[draft.gapLeft] = {
-      char,
-      side: charSize,
-      top: draft.content[draft.gapLeft - 1].top + lineSize,
-      page: draft.content[draft.gapLeft - 1].page,
-      line: draft.content[draft.gapLeft - 1].line + 1,
-    };
-    draft.paging[draft.content[draft.gapLeft - 1].page][draft.content[draft.gapLeft - 1].line].end =
-      draft.gapLeft - 1;
-    if (
-      _.isUndefined(
-        draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line],
-      )
-    ) {
-      draft.paging[draft.content[draft.gapLeft].page].push({
-        start: draft.gapLeft,
-        end: draft.gapLeft,
-      });
-    } else {
-      draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].start =
-        draft.gapLeft;
-    }
-  } else {
-    draft.content[draft.gapLeft] = {
-      char,
-      side: charSize,
-      top: 0,
-      page: draft.content[draft.gapLeft - 1].page + 1,
-      line: 0,
-    };
-    draft.paging[draft.content[draft.gapLeft - 1].page][draft.content[draft.gapLeft - 1].line].end =
-      draft.gapLeft - 1;
-    if (_.isUndefined(draft.paging[draft.content[draft.gapLeft].page])) {
-      draft.paging.push([{ start: draft.gapLeft, end: draft.gapLeft }]);
-    } else if (
-      _.isUndefined(
-        draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line],
-      )
-    ) {
-      draft.paging[draft.content[draft.gapLeft].page].push({
-        start: draft.gapLeft,
-        end: draft.gapLeft,
-      });
-    } else {
-      draft.paging[draft.content[draft.gapLeft].page][draft.content[draft.gapLeft].line].start =
-        draft.gapLeft;
-    }
-  }
-  draft.content = _.map(draft.content, (size: number, index: number): number => {
-    if (index > draft.gapRight) {
-      const leftIndex = index === draft.gapRight + 1 ? draft.gapLeft : index - 1;
-      if (draft.content[index].side + charSize < maxWidth) {
-        draft.content[index].side += charSize;
-        draft.content[index].top = draft.content[leftIndex].top;
-      } else if (
-        draft.content[index].side + charSize >= maxWidth &&
-        draft.content[index].top + lineSize < maxHeight
-      ) {
-        draft.content[index] = {
-          char: draft.content[index].char,
-          side: sizing(draft.content[index].char).width,
-          top: draft.content[index].top + lineSize,
-          page: draft.content[index].page,
-          line: draft.content[leftIndex].line + 1,
-        };
-        draft.paging[draft.content[leftIndex].page][draft.content[leftIndex].line].end = leftIndex;
-        if (_.isUndefined(draft.paging[draft.content[index].page][draft.content[index].line])) {
-          draft.paging[draft.content[index].page].push({ start: index - 128, end: index - 128 });
-        } else {
-          draft.paging[draft.content[index].page][draft.content[index].line].start = index - 128;
-        }
+  while (draft.content[leftCursor] !== SPC && leftCursor >= 0) {
+    if (draft.content[leftCursor] !== GAP) {
+      if (typeof draft.content[leftCursor] === 'string') {
+        throw new Error('looped on string instead of object');
       } else {
-        draft.content[index] = {
-          char: draft.content[index].char,
-          side: draft.content[index].side - draft.content[leftIndex].side - charSize,
-          top: 0,
-          page: draft.content[leftIndex].page + 1,
-          line: 0,
-        };
-        draft.paging[draft.content[leftIndex].page][draft.content[leftIndex].line].end = leftIndex;
-        if (_.isUndefined(draft.paging[draft.content[index].page])) {
-          draft.paging.push([{ start: index - 128, end: index - 128 }]);
-        } else if (
-          _.isUndefined(draft.paging[draft.content[index].page][draft.content[index].line])
-        ) {
-          draft.paging[draft.content[index].page].push({ start: index - 128, end: index - 128 });
-        } else {
-          draft.paging[draft.content[index].page][draft.content[index].line].start = index - 128;
-        }
+        leftWord.push(draft.content[leftCursor].char);
+        leftCursor -= 1;
       }
+    } else {
+      leftCursor -= 1;
     }
-    return size;
+  }
+  while (draft.content[rightCursor] !== SPC && rightCursor < draft.content.length) {
+    if (draft.content[rightCursor] !== GAP) {
+      if (typeof draft.content[rightCursor] === 'string') {
+        throw new Error('looped on string instead of object');
+      } else {
+        rightWord.push(draft.content[rightCursor].char);
+        rightCursor += 1;
+      }
+    } else {
+      rightCursor += 1;
+    }
+  }
+
+  return {
+    leftLength: leftWord.length,
+    rightLength: rightWord.length,
+    cursor: index - leftCursor - 1,
+    word: _.join(_.concat(_.reverse(leftWord), [draft.content[index]], rightWord), ''),
+  };
+}
+
+function getWidthFromSizes(array: Array<{ width: number, height: number }>): number {
+  const lastItem = _.last(array);
+  return _.isUndefined(lastItem) ? 0 : lastItem.width;
+}
+
+function getHeightFromSizes(array: Array<{ width: number, height: number }>): number {
+  return _.max(_.map(array, (member: { width: number, height: number }): number => member.height));
+}
+
+function adjustWord(
+  word: {
+    leftLength: number,
+    rightLength: number,
+    cursor: number,
+    word: string,
+  },
+  sizes: Array<{ width: number, height: number }>,
+  widthDiff: number,
+  draft: DocumentType,
+) {
+  const wordStart = draft.gapLeft - word.leftLength;
+  const wordEnd = draft.gapRight + word.rightLength;
+  const leftContent = draft.content[wordStart - 1];
+  const width = getWidthFromSizes(sizes);
+  const height = getHeightFromSizes(sizes);
+
+  if (typeof leftContent === 'string') {
+    throw new Error('problem in adjusting');
+    // TODO: new change line criteria: remaining space / space number >= word spacing
+  } else if ((_.isUndefined(leftContent) ? 0 : leftContent.side) + width <= maxWidth) {
+    _.forEach(
+      _.concat(_.range(wordStart, draft.gapLeft + 1), _.range(draft.gapRight + 1, wordEnd + 1)),
+      (index: number) => {
+        const sizeIndex = index - wordStart - (index >= draft.gapRight + 1 ? draft.gapSize - 1 : 0);
+        _.assign(draft.content[index], {
+          side: (_.isUndefined(leftContent) ? 0 : leftContent.side) + sizes[sizeIndex].width,
+          height: sizes[sizeIndex].height,
+          page: _.isUndefined(leftContent) ? 0 : leftContent.page,
+          line: _.isUndefined(leftContent) ? 0 : leftContent.line,
+        });
+        if (typeof draft.content[index] !== 'string') {
+          _.assign(draft.paging[draft.content[index].page][draft.content[index].line], {
+            end: index,
+            height: _.max([
+              height,
+              draft.paging[draft.content[index].page][draft.content[index].line].height,
+            ]),
+          });
+        } else {
+          throw new Error('looped on string instead of object');
+        }
+      },
+    );
+  }
+}
+
+export function adjust(draft: DocumentType) {
+  _.forEach(_.range(0, draft.content.length), (index) => {
+    const currentWord = getWordFromIndex(index, draft);
+    const currentSizes = wordSizes(currentWord.word);
+    const wordStart = index - currentWord.leftLength;
+    const wordEnd = index + currentWord.rightLength;
+    const leftContent = draft.content[wordStart - 1];
+    const width = getWidthFromSizes(currentSizes);
+    const height = getHeightFromSizes(currentSizes);
   });
-  return draft;
 }
 
-// cursor related functions
-export function left(draft: DocumentType) {
-  if (draft.gapLeft !== 0) {
-    draft.gapLeft -= 1;
-    draft.gapRight -= 1;
-    draft.content[draft.gapRight + 1] = draft.content[draft.gapLeft];
-    draft.content[draft.gapLeft] = GAP;
+export function insertChar(char: string, draft: DocumentType) {
+  const currentWord = getCurrentWord(undefined, draft);
+  const afterWord = getCurrentWord(char, draft);
+  const currentSizes = wordSizes(currentWord.word);
+  const afterSizes = wordSizes(afterWord.word);
+  const widthDiff = getWidthFromSizes(afterSizes) - getWidthFromSizes(currentSizes);
+
+  draft.content[draft.gapLeft] = { char, side: 0, height: 0, page: 0, line: 0 };
+
+  // first adjust current word sizes
+  adjustWord(afterWord, afterSizes, widthDiff, draft);
+  // then adjust until the end of paragraph
+  // after that change line numbering until the end of document
+
+  draft.gapLeft += 1;
+  draft.gapSize -= 1;
+  if (draft.gapSize === 0) {
+    grow(draft.gapLeft, draft);
   }
 }
 
-export function right(draft: DocumentType) {
-  if (draft.gapRight !== draft.content.length - 1) {
-    draft.gapLeft += 1;
-    draft.gapRight += 1;
-    draft.content[draft.gapLeft - 1] = draft.content[draft.gapRight];
-    draft.content[draft.gapRight] = GAP;
-  }
-}
+export function insertSpace(draft: DocumentType) {
+  draft.content[draft.gapLeft] = SPC;
 
-export function move(position: number, draft: DocumentType) {
-  draft.content = [
-    ..._.slice(draft.content, 0, draft.gapLeft),
-    ..._.slice(draft.content, draft.gapRight + 1),
-  ];
-  if (_.inRange(position, 0, draft.content.length + 1)) {
-    grow(position, draft);
-  } else if (position < 0) {
-    grow(0, draft);
-  } else {
-    grow(draft.content.length, draft);
+  draft.gapLeft += 1;
+  draft.gapSize -= 1;
+  if (draft.gapSize === 0) {
+    grow(draft.gapLeft, draft);
   }
 }
