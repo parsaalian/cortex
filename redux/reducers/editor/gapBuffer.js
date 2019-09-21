@@ -106,13 +106,23 @@ function getSideSpace(word: WordType, side: string, draft: DocumentType): Array<
   return isLeft ? _.reverse(space) : space;
 }
 
+function getLastWordEndIndex(word: WordType, draft: DocumentType): number {
+  const leftSpace = getSideSpace(word, 'left', draft);
+  return word.leftIndex - leftSpace.length - 1;
+}
+
+function getNextWordStartIndex(word: WordType, draft: DocumentType): number {
+  const rightSpace = getSideSpace(word, 'right', draft);
+  return word.rightIndex + rightSpace.length + 1;
+}
+
 export function adjustParagraph(draft: DocumentType) {
   let index = draft.gapLeft;
   const word = getWordFromIndex(draft.gapLeft, draft);
-  console.log(getSideSpace(word, 'right', draft));
-  /* while (!_.includes(getLeftSpace(word, draft), PAR)) {
+  while (!_.includes(getSideSpace(word, 'left', draft), PAR) && index < draft.content.length) {
     const pointerWord = getWordFromIndex(index, draft);
-    const d = getLastCharDistanceFromSide(pointerWord, draft);
+    console.log(pointerWord.word);
+    /* const d = getLastCharDistanceFromSide(pointerWord, draft);
     if (d > maxWidth) {
       adjustLineAndPageNumber(word, draft);
     }
@@ -120,9 +130,9 @@ export function adjustParagraph(draft: DocumentType) {
       adjustByReassign(pointerWord, draft);
     } else {
       adjustByShift(pointerWord, draft);
-    }
-    index = getNextWordStartIndex(index, draft);
-  } */
+    } */
+    index = getNextWordStartIndex(pointerWord, draft);
+  }
 }
 
 /*
