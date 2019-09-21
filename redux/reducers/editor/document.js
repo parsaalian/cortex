@@ -1,6 +1,6 @@
 // @flow
 import produce from 'immer';
-import { insertChar, insertSpace } from './gapBuffer';
+import { insertChar, insertSpace, insertEnter } from './gapBuffer';
 import { left, right } from './cursor';
 import type { DocumentType, KeyboardEventType } from '~/redux/types/editor';
 import initialState from '~/redux/stores/editor/initialState';
@@ -32,7 +32,10 @@ function insertSpaceReducer(state: DocumentType): DocumentType {
 }
 
 function insertEnterReducer(state: DocumentType): DocumentType {
-  return state;
+  return produce(state, (draft: DocumentType): DocumentType => {
+    insertEnter(draft);
+    return draft;
+  });
 }
 
 function removeCharReducer(state: DocumentType): DocumentType {
