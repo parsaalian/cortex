@@ -143,19 +143,59 @@ function adjustByReassign(word: WordType, draft: DocumentType) {
   const firstCharDistanceFromSide = getFirstCharDistanceFromSide(word, draft);
   let counter = 0;
   _.forEach(_.range(word.leftIndex, word.rightIndex + 1), (index: number) => {
+    const { page, line } = draft.content[index];
     if (draft.content[index] !== GAP) {
       _.assign(draft.content[index], {
         side: firstCharDistanceFromSide + sizes[counter].width,
         height: sizes[counter].height,
       });
-      _.assign(draft.paging[draft.content[index].page][draft.content[index].line], {
-        height: _.max([
-          sizes[counter].height,
-          draft.paging[draft.content[index].page][draft.content[index].line],
-        ]),
+      _.assign(draft.paging[page][line], {
+        height: _.max([sizes[counter].height, draft.paging[page][line]]),
       });
       counter += 1;
     }
+  });
+}
+
+function adjustLineAndPageNumber(word: WordType, draft: DocumentType) {
+  const sizes = wordSizes(word.word);
+  const height = getHeightFromSizes(sizes);
+  const { page, line } = draft.content[word.cursor];
+  let newPage = page;
+  let newLine = line;
+  if (draft.paging[page][line].height + height <= maxHeight) {
+    newLine = line + 1;
+    if (_.isUndefined(draft.paging[newPage][newLine])) {
+      draft.paging[page].push({ start: word.leftIndex, height: 0 });
+    }
+  } else {
+    newPage = page + 1;
+    newLine = 0;
+    if (_.isUndefined(draft.paging[newPage])) {
+      draft.paging.push([{ start: word.leftIndex, height: 0 }]);
+    }
+  }
+  _.forEach(_.range(word.leftIndex, word.rightIndex + 1), (index: number) => {
+    if (draft.content[index] !== GAP) {
+      _.assign(draft.content[index], {
+        page: newPage,
+        line: newLine,
+      });
+    }
+  });
+}
+
+function setPagingNumbers(word: WordType, draft: DocumentType) {
+  const { page, line } = draft.content[word.cursor];
+  _.assign(draft.paging[page][line], {
+    start: _.min([
+      word.leftIndex <= draft.gapLeft ? word.leftIndex : word.leftIndex - draft.gapSize + 1,
+      draft.paging[page][line].start,
+    ]),
+    end: _.max([
+      word.rightIndex <= draft.gapLeft ? word.rightIndex : word.rightIndex - draft.gapSize + 1,
+      draft.paging[page][line].end,
+    ]),
   });
 }
 
@@ -163,34 +203,20 @@ export function adjustParagraph(draft: DocumentType) {
   let index = draft.gapLeft;
   const word = getWordFromIndex(draft.gapLeft, draft);
   while (!_.includes(getWordSideString(word, 'left', draft), PAR) && index < draft.content.length) {
-    const pointerWord = getWordFromIndex(index, draft);
-    const d = getLastCharDistanceFromSide(pointerWord, draft);
-    /* if (d > maxWidth) {
+    const d = getLastCharDistanceFromSide(word, draft);
+    if (d > maxWidth) {
       adjustLineAndPageNumber(word, draft);
-    } */
-    adjustByReassign(pointerWord, draft);
-    index = getNextWordStartIndex(pointerWord, draft);
+    }
+    setPagingNumbers(word, draft);
+    adjustByReassign(word, draft);
+    index = getNextWordStartIndex(word, draft);
   }
 }
-
-/*
- *
- *
- *
- *
- *
- *
- *
- *
- */
 
 export function insertChar(char: string, draft: DocumentType) {
   draft.content[draft.gapLeft] = { char, side: 0, height: 0, page: 0, line: 0 };
 
   adjustParagraph(draft);
-  // first adjust current word sizes
-  // then adjust until the end of paragraph
-  // after that change line numbering until the end of document
 
   draft.gapLeft += 1;
   draft.gapSize -= 1;
@@ -200,7 +226,9 @@ export function insertChar(char: string, draft: DocumentType) {
 }
 
 export function insertSpace(draft: DocumentType) {
-  draft.content[draft.gapLeft] = SPC;
+  if (draft.content[draft.gapLeft - 1] !== SPC) {
+    draft.content[draft.gapLeft] = SPC;
+  }
 
   draft.gapLeft += 1;
   draft.gapSize -= 1;

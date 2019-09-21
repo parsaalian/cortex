@@ -9,7 +9,7 @@ const getDocumentText = (state) => {
   const filteredContent = _.filter(content, (char) => char !== GAP);
   const text = _.map(paging, (pages) =>
     _.map(pages, (lines) =>
-      _.map(_.slice(filteredContent, lines.start, lines.end + 1), (part) => part.char),
+      _.map(_.slice(filteredContent, lines.start, lines.end + 1), (part) => part.char || part),
     ),
   );
   return text;
