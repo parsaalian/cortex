@@ -5,6 +5,7 @@ import { wordSizes } from '~/redux/utils/editor/sizing';
 
 const maxWidth = 559;
 const maxHeight = 20;
+const spaceSize = 4;
 export const SPC = 'BUFFER/SPACE';
 export const GAP = 'BUFFER/GAP';
 export const PAR = 'BUFFER/PARAGRAPH';
@@ -90,47 +91,84 @@ function getHeightFromSizes(array: Array<{ width: number, height: number }>): nu
   return _.max(_.map(array, (member: { width: number, height: number }): number => member.height));
 }
 
-function getSideSpace(word: WordType, side: string, draft: DocumentType): Array<string> {
+function getWordSideString(word: WordType, side: string, draft: DocumentType): Array<string> {
   const isLeft = side === 'left';
   let index = isLeft ? word.leftIndex - 1 : word.rightIndex + 1;
   const space = [];
-  while (
-    typeof draft.content[index] === 'string' &&
-    (isLeft ? index >= 0 : index < draft.content.length)
-  ) {
-    if (draft.content[index] !== GAP) {
-      space.push(draft.content[index]);
-    }
+  while (typeof draft.content[index] === 'string' && index >= 0 && index < draft.content.length) {
+    space.push(draft.content[index]);
     index -= isLeft ? 1 : -1;
   }
   return isLeft ? _.reverse(space) : space;
 }
 
 function getLastWordEndIndex(word: WordType, draft: DocumentType): number {
-  const leftSpace = getSideSpace(word, 'left', draft);
+  const leftSpace = getWordSideString(word, 'left', draft);
   return word.leftIndex - leftSpace.length - 1;
 }
 
 function getNextWordStartIndex(word: WordType, draft: DocumentType): number {
-  const rightSpace = getSideSpace(word, 'right', draft);
+  const rightSpace = getWordSideString(word, 'right', draft);
   return word.rightIndex + rightSpace.length + 1;
+}
+
+function getSpaceWidth(array: Array<string>): number {
+  return _.filter(array, (index: number): boolean => index === SPC).length * spaceSize;
+}
+
+function getFirstCharDistanceFromSide(word: WordType, draft: DocumentType): number {
+  const leftSideString = getWordSideString(word, 'left', draft);
+  const lastWordEndIndex = getLastWordEndIndex(word, draft);
+  const spacesWidth = getSpaceWidth(leftSideString);
+  if (lastWordEndIndex < 0) {
+    return spacesWidth;
+  }
+  if (
+    draft.content[lastWordEndIndex].page === draft.content[word.cursor].page &&
+    draft.content[lastWordEndIndex].line === draft.content[word.cursor].line
+  ) {
+    return draft.content[lastWordEndIndex].side + spacesWidth;
+  }
+  return 0;
+}
+
+function getLastCharDistanceFromSide(word: WordType, draft: DocumentType): number {
+  const sizes = wordSizes(word.word);
+  const wordWidth = getWidthFromSizes(sizes);
+  return getFirstCharDistanceFromSide(word, draft) + wordWidth;
+}
+
+function adjustByReassign(word: WordType, draft: DocumentType) {
+  const sizes = wordSizes(word.word);
+  const firstCharDistanceFromSide = getFirstCharDistanceFromSide(word, draft);
+  let counter = 0;
+  _.forEach(_.range(word.leftIndex, word.rightIndex + 1), (index: number) => {
+    if (draft.content[index] !== GAP) {
+      _.assign(draft.content[index], {
+        side: firstCharDistanceFromSide + sizes[counter].width,
+        height: sizes[counter].height,
+      });
+      _.assign(draft.paging[draft.content[index].page][draft.content[index].line], {
+        height: _.max([
+          sizes[counter].height,
+          draft.paging[draft.content[index].page][draft.content[index].line],
+        ]),
+      });
+      counter += 1;
+    }
+  });
 }
 
 export function adjustParagraph(draft: DocumentType) {
   let index = draft.gapLeft;
   const word = getWordFromIndex(draft.gapLeft, draft);
-  while (!_.includes(getSideSpace(word, 'left', draft), PAR) && index < draft.content.length) {
+  while (!_.includes(getWordSideString(word, 'left', draft), PAR) && index < draft.content.length) {
     const pointerWord = getWordFromIndex(index, draft);
-    console.log(pointerWord.word);
-    /* const d = getLastCharDistanceFromSide(pointerWord, draft);
-    if (d > maxWidth) {
+    const d = getLastCharDistanceFromSide(pointerWord, draft);
+    /* if (d > maxWidth) {
       adjustLineAndPageNumber(word, draft);
-    }
-    if (_.isEqual(pointerWord, word)) {
-      adjustByReassign(pointerWord, draft);
-    } else {
-      adjustByShift(pointerWord, draft);
     } */
+    adjustByReassign(pointerWord, draft);
     index = getNextWordStartIndex(pointerWord, draft);
   }
 }
