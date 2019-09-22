@@ -4,7 +4,7 @@ import type { DocumentType } from '~/redux/types/editor';
 import { wordSizes } from '~/redux/utils/editor/sizing';
 
 const maxWidth = 559;
-const maxHeight = 20;
+const maxHeight = 100;
 const spaceSize = 4;
 export const SPC = 'BUFFER/SPACE';
 export const GAP = 'BUFFER/GAP';
@@ -21,16 +21,15 @@ type WordType = {
 
 // insertion related functions
 export function grow(position: number, draft: DocumentType): DocumentType {
-  const draftCopy = { ...draft };
-  draftCopy.content = [
-    ..._.slice(draftCopy.content, 0, position),
+  draft.content = [
+    ..._.slice(draft.content, 0, position),
     ..._.times(128, _.constant(GAP)),
-    ..._.slice(draftCopy.content, position),
+    ..._.slice(draft.content, position),
   ];
-  draftCopy.gapLeft = position;
-  draftCopy.gapRight = position + 127;
-  draftCopy.gapSize = 128;
-  return draftCopy;
+  draft.gapLeft = position;
+  draft.gapRight = position + 127;
+  draft.gapSize = 128;
+  return draft;
 }
 
 function getWordFromIndex(index: number, draft: DocumentType): WordType {
@@ -183,6 +182,9 @@ function adjustLineAndPageNumber(word: WordType, draft: DocumentType) {
       });
     }
   });
+  _.assign(draft.paging[page][line], {
+    end: getLastWordEndIndex(word, draft),
+  });
 }
 
 function setPagingNumbers(word: WordType, draft: DocumentType) {
@@ -199,6 +201,12 @@ function setPagingNumbers(word: WordType, draft: DocumentType) {
   });
 }
 
+function setCursorPageAndLine(word: WordType, draft: DocumentType) {
+  const { page, line } = draft.content[word.cursor];
+  draft.cursorPage = page;
+  draft.cursorLine = line;
+}
+
 export function adjustParagraph(draft: DocumentType) {
   let index = draft.gapLeft;
   const word = getWordFromIndex(draft.gapLeft, draft);
@@ -207,6 +215,7 @@ export function adjustParagraph(draft: DocumentType) {
     if (d > maxWidth) {
       adjustLineAndPageNumber(word, draft);
     }
+    setCursorPageAndLine(word, draft);
     setPagingNumbers(word, draft);
     adjustByReassign(word, draft);
     index = getNextWordStartIndex(word, draft);
@@ -214,7 +223,13 @@ export function adjustParagraph(draft: DocumentType) {
 }
 
 export function insertChar(char: string, draft: DocumentType) {
-  draft.content[draft.gapLeft] = { char, side: 0, height: 0, page: 0, line: 0 };
+  draft.content[draft.gapLeft] = {
+    char,
+    side: 0,
+    height: 0,
+    page: draft.cursorPage,
+    line: draft.cursorLine,
+  };
 
   adjustParagraph(draft);
 
@@ -226,9 +241,7 @@ export function insertChar(char: string, draft: DocumentType) {
 }
 
 export function insertSpace(draft: DocumentType) {
-  if (draft.content[draft.gapLeft - 1] !== SPC) {
-    draft.content[draft.gapLeft] = SPC;
-  }
+  draft.content[draft.gapLeft] = SPC;
 
   draft.gapLeft += 1;
   draft.gapSize -= 1;

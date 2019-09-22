@@ -24,5 +24,7 @@ export default {
     gapRight: 127,
     paging: [[{ start: 0, height: 0 }]],
     content: _.times(128, _.constant(GAP)),
+    cursorPage: 0,
+    cursorLine: 0,
   },
 };
