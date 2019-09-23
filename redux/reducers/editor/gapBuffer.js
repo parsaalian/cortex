@@ -33,10 +33,15 @@ export function grow(position: number, draft: DocumentType): DocumentType {
 }
 
 function getWordFromIndex(index: number, draft: DocumentType): WordType {
+  let i = index;
+  while (typeof draft.content[i] === 'string' && i < draft.content.length) {
+    i += 1;
+  }
+
   const leftWord = [];
   const rightWord = [];
-  let leftCursor = index - 1;
-  let rightCursor = index + 1;
+  let leftCursor = i - 1;
+  let rightCursor = i + 1;
 
   while (
     draft.content[leftCursor] !== SPC &&
@@ -72,12 +77,12 @@ function getWordFromIndex(index: number, draft: DocumentType): WordType {
   }
 
   return {
-    cursor: index,
+    cursor: i,
     leftLength: leftWord.length,
     rightLength: rightWord.length,
     leftIndex: leftCursor + 1,
     rightIndex: rightCursor - 1,
-    word: _.join(_.concat(_.reverse(leftWord), [draft.content[index].char], rightWord), ''),
+    word: _.join(_.concat(_.reverse(leftWord), [draft.content[i].char], rightWord), ''),
   };
 }
 
@@ -209,9 +214,15 @@ function setCursorPageAndLine(word: WordType, draft: DocumentType) {
 
 export function adjustParagraph(draft: DocumentType) {
   let index = draft.gapLeft;
-  const word = getWordFromIndex(draft.gapLeft, draft);
+  console.log(index);
+  console.log('adjusting');
+  const word = getWordFromIndex(index, draft);
+  index = word.cursor;
+  console.log(word);
   while (!_.includes(getWordSideString(word, 'left', draft), PAR) && index < draft.content.length) {
+    console.log('in adjustment while');
     const d = getLastCharDistanceFromSide(word, draft);
+    console.log(d);
     if (d > maxWidth) {
       adjustLineAndPageNumber(word, draft);
     }
@@ -219,6 +230,7 @@ export function adjustParagraph(draft: DocumentType) {
     setPagingNumbers(word, draft);
     adjustByReassign(word, draft);
     index = getNextWordStartIndex(word, draft);
+    console.log(index);
   }
 }
 
@@ -242,6 +254,10 @@ export function insertChar(char: string, draft: DocumentType) {
 
 export function insertSpace(draft: DocumentType) {
   draft.content[draft.gapLeft] = SPC;
+
+  if (draft.gapRight !== draft.content.length - 1) {
+    adjustParagraph(draft);
+  }
 
   draft.gapLeft += 1;
   draft.gapSize -= 1;
