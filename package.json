@@ -19,7 +19,7 @@
     "babel-eslint": "^10.0.3",
     "classnames": "^2.2.6",
     "commander": "^3.0.1",
-    "immer": "^3.2.0",
+    "immer": "^8.0.1",
     "jest": "^24.9.0",
     "lodash": "^4.17.15",
     "next": "^9.0.5",
